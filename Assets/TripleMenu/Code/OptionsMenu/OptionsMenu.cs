@@ -320,11 +320,11 @@ public class OptionsMenu : MonoBehaviour
 
         float musicVol = PlayerPrefs.GetFloat(Key_MusicVol, 1f);
         musicSlider.value = musicVol;
-        mixer.SetFloat(Key_MusicVol, Mathf.Log10(musicVol) * 20);
+        mixer.SetFloat(Key_MusicVol, musicVol == 0? 0 : Mathf.Log10(musicVol) * 20);
 
         float SFXVol = PlayerPrefs.GetFloat(Key_SFXVol, 1f);
         SFXSlider.value = SFXVol;
-        mixer.SetFloat(Key_SFXVol, Mathf.Log10(SFXVol) * 20);
+        mixer.SetFloat(Key_SFXVol, musicVol == 0 ? 0 : Mathf.Log10(SFXVol) * 20);
 
         bool isMute = PlayerPrefs.GetInt(Key_Master, 0) == 1;
         MuteToggle.isOn = isMute; //set ui
