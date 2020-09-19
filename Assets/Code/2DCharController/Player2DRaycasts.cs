@@ -15,6 +15,7 @@ public class Player2DRaycasts : MonoBehaviour
     //Cache hit data
     RaycastHit2D hit_BL_down;
     RaycastHit2D hit_BR_down;
+    Vector2 slopeNormal;
 
     //Const
     const float CheckDistance = 0.08f;
@@ -26,10 +27,10 @@ public class Player2DRaycasts : MonoBehaviour
     public bool AgainstRight => IsAgainstSide(false);
     public Vector2 GroundGradient => GetGroundGradient();
 
-    Vector2 BL => (Vector2)transform.position + offset_BL;
-    Vector2 BR => (Vector2)transform.position + offset_BR;
-    Vector2 TL => (Vector2)transform.position + offset_TL;
-    Vector2 TR => (Vector2)transform.position + offset_TR;
+    public Vector2 BL { get; private set; }
+    public Vector2 BR { get; private set; }
+    public Vector2 TL { get; private set; }
+    public Vector2 TR { get; private set; }
     #endregion
 
     #region MonoBehavior
@@ -39,15 +40,33 @@ public class Player2DRaycasts : MonoBehaviour
         Bounds bounds = GetComponent<Collider2D>().bounds;
         float x = bounds.extents.x - CheckDistance / 2f;
         float y = bounds.extents.y - CheckDistance / 2f;
-        offset_BL = new Vector2(-x, -y); 
+        offset_BL = new Vector2(-x, -y);
         offset_BR = new Vector2(x, -y);
         offset_TL = new Vector2(-x, y);
         offset_TR = new Vector2(x, y);
     }
     #endregion
 
+    //public void UpdateRaycastOrigins ()
+    //{
+    //    BL = (Vector2)transform.position + offset_BL;
+    //    BR = (Vector2)transform.position + offset_BR;
+    //    TL = (Vector2)transform.position + offset_TL;
+    //    TR = (Vector2)transform.position + offset_TR;
+    //}
+
+    #region Public
+    public void UpdateOriginPoints()
+    {
+        BL = (Vector2)transform.position + offset_BL;
+        BR = (Vector2)transform.position + offset_BR;
+        TL = (Vector2)transform.position + offset_TL;
+        TR = (Vector2)transform.position + offset_TR;
+    }
+    #endregion
+
     #region Collision checks
-    Vector2 GetGroundGradient ()
+    Vector2 GetGroundGradient()
     {
         Vector2 p1 = hit_BL_down.point;
         Vector2 p2 = hit_BL_down.point;

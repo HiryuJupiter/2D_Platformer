@@ -100,8 +100,8 @@ public class PauseMenu : MonoBehaviour
         state = PauseMenuStates.Unpaused;
         transition.UnPause();
         Time.timeScale = 1f;
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
     }
 
     void QuitGame()
