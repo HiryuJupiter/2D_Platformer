@@ -2,30 +2,35 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
-//Coyote time: A short time period allows the player to jump after walking off a platform.
-//Jump queue timer: Allows the player to "cache" the jump command when pressing jump right before land on ground.
+/*Coyote time: A short time period allows the player to jump after walking off a platform.
+Jump queue timer: Allows the player to "cache" the jump command when pressing jump right before land on ground.
+Jumping and OnGround are two different situations that doesn't always overlap. After pressing jump, you're still onground for a few frames
+due to the raycast distance. And you can also walk off a platform that cause you to become not-on-ground and no-jumping.
+
+ */
+
 
 
 [RequireComponent(typeof(Player2DRaycasts))]
 [RequireComponent(typeof(Player2DController_Graphics))]
 public class Player2DController_Motor : MonoBehaviour
 {
-	[Header("Move Speed")]
+	[Header("Movement")]
 	[SerializeField] float moveSpeed = 15f;
 	//[Range(0, 1)]	[SerializeField] float crouchMoveSpeed = .36f;
 	[Range(5f, 50f)] [SerializeField] float steeringOnGround = 50f;
 	[Range(5f, 50f)] [SerializeField] float steeringInAir = 15f;
+	[SerializeField] float gravity = 100f;
+	[SerializeField] float maxFallSpeed = -10f;
 
 	[Header("Jumping")]
-	[SerializeField] float jumpForce = 25f;
-	
+	[SerializeField] float minJumpForce = 25f;
+	[SerializeField] float maxJumpForce = 35f;
+
+	[Header("Environment check")]
 	[SerializeField] LayerMask groundLayer;
+	
 
-	[Header("Gravity")]
-	[SerializeField] float gravity = 100f;
-
-	[Header("Slope")]
-	[Range(1f, 89f)] [SerializeField] float maxSlope = 80f;
 
 	float coyoteAllowance = 0.2f;
 	float jumpQueueAllowance = 0.2f;
@@ -35,22 +40,19 @@ public class Player2DController_Motor : MonoBehaviour
 
 	//Components and classes
 	Player2DController_Graphics graphics;
-	Player2DRaycasts raycast;
+	Player2DRaycasts raycaster;
 	Rigidbody2D rb;
 
 	//Status
 	Vector3 targetVelocity;
-	bool onGround;
-	bool onGroundPrevious;
-	bool jumping;
+	bool isOnGround;
+	bool isOnGroundPrevious;
+	bool isJumping;
+
 	float coyoteTimer; 
 	float jumpQueueTimer;
-	float facingSign;
-	//bool crouching;
 
-	//float crouchMoveModifier;
-	//Cache
-	float maxSlopeTangent; //To make slope calculations faster
+	int facingSign;
 
 	//Ignore
 	float smoothDampVelocity;
@@ -59,24 +61,18 @@ public class Player2DController_Motor : MonoBehaviour
 	const float SkinWidth = 0.015f;
 
 	#region Property
-	float steering => onGround ? steeringOnGround : steeringInAir;
-	bool DetectsGroundWhileFalling => !onGroundPrevious && onGround && Falling;
-	bool WalkedOffPlatform => onGroundPrevious && !onGround && !jumping;
+	float steering => isOnGround ? steeringOnGround : steeringInAir;
+	bool WalkedOffPlatform => isOnGroundPrevious && !isOnGround && !isJumping;
 	bool Falling => rb.velocity.y < 0f;
-	bool MovingRight => GameInput.MoveX > 0.1f;
-	bool MovingLeft => GameInput.MoveX < -0.1f;
-	bool CanJump => onGround || (coyoteTimer > 0f && !jumping);
+	bool CanJump => isOnGround || (coyoteTimer > 0f && !isJumping);
 	#endregion
 
 	#region MonoBehavior
 	void Awake()
 	{
 		rb = GetComponent<Rigidbody2D>();
-		raycast = GetComponent<Player2DRaycasts>();
+		raycaster = GetComponent<Player2DRaycasts>();
 		graphics = GetComponent<Player2DController_Graphics>();
-		//crouching = false;
-
-		maxSlopeTangent = Mathf.Tan(maxSlope * Mathf.Deg2Rad);
 	}
 
     void Update()
@@ -86,7 +82,7 @@ public class Player2DController_Motor : MonoBehaviour
 	}
     void FixedUpdate()
 	{
-		CacheCalculationValues();
+		PhysicsCheck();
 
 		//Move
 		HorizontalMoveUpdate();
@@ -96,22 +92,22 @@ public class Player2DController_Motor : MonoBehaviour
 	}
 	#endregion
 
+
+	void PhysicsCheck()
+	{
+		raycaster.UpdateOriginPoints();
+		isOnGround = raycaster.IsOnGround;
+		UpdateFacing();
+	}
+
 	#region Movement updates
 	void VerticalMoveUpdate ()
     {
-		if (onGround)
+		if (isOnGround)
         {
-			targetVelocity.y = 0f;
-			if (GameInput.MoveX != 0)
-            {
-				StickToDecendingSlope();
-			}
-			else
-            {
-
-            }
+			CheckIfJustLanded();
 		}
-		else //If not on ground
+		else
         {
 			ApplyGravity();
 
@@ -119,11 +115,6 @@ public class Player2DController_Motor : MonoBehaviour
 			if (WalkedOffPlatform)
 			{
 				coyoteTimer = coyoteAllowance;
-			}
-
-			if (DetectsGroundWhileFalling)
-			{
-				Lands();
 			}
 		}
 	}
@@ -136,121 +127,84 @@ public class Player2DController_Motor : MonoBehaviour
 
 	void JumpDetection()
     {
-        if (GameInput.JumpBtn)
+        if (GameInput.JumpBtnDown)
         {
 			if (CanJump)
             {
-				ApplyJump();
+				OnJumpInputDown();
 			}
 			else
             {
 				jumpQueueTimer = jumpQueueAllowance;
 			}
         }
+
+		if (GameInput.JumpBtnUp)
+        {
+			OnJumpInputUp();
+		}
     }
 	#endregion
 
-	#region Collision
-	void StickToDecendingSlope()
+	#region Movement logic
+	void OnJumpInputDown()
 	{
-		Vector2 origin = facingSign > 0? raycast.BR : raycast.BL;
-		RaycastHit2D hit = Physics2D.Raycast(origin, Vector3.down, 100f, groundLayer);
-		if (hit)
-		{
-			float slopeAngle = Vector2.Angle(Vector2.up, hit.normal);
-
-			//If the slope is less than maxSlope angle
-			if (slopeAngle != 0 && slopeAngle < maxSlope)
-			{
-				//Check if we're decending the slope, by checking if we are facing the same x-direction as the slope normal
-				if (Mathf.Sign(hit.normal.x) == facingSign)
-				{
-					//Check if we are standing close enough to the platform to begin decend calculation. 
-					float descendableRange = (Mathf.Abs(GameInput.MoveX) * Mathf.Tan(slopeAngle * Mathf.Deg2Rad));
-					if (hit.distance - SkinWidth < descendableRange)
-					{
-						//Specify the decend amount
-						float moveDist = Mathf.Abs(GameInput.MoveX);
-						testtemp = moveDist;
-						Debug.DrawRay(hit.point, hit.normal, Color.red);
-						targetVelocity.x = Mathf.Cos(slopeAngle * Mathf.Deg2Rad) * moveDist * facingSign;
-						targetVelocity.y = -Mathf.Sin(slopeAngle * Mathf.Deg2Rad) * moveDist;
-					}
-					else
-					{
-						Debug.DrawRay(hit.point, hit.normal, Color.yellow);
-					}
-				}
-			}
-			else
-            {
-				targetVelocity.y = 0f;
-
-			}
-		}
-	}
-	#endregion
-	float testtemp;
-	#region Movement events
-	void ApplyJump()
-	{
-		jumping = true;
-		targetVelocity.y = jumpForce;
-
+		isJumping = true;
+		targetVelocity.y = maxJumpForce;
 		jumpQueueTimer = -1f;
 		coyoteTimer = -1f;
 	}
 
+	void OnJumpInputUp ()
+    {
+		isJumping = false;
+		if (targetVelocity.y > minJumpForce)
+        {
+			targetVelocity.y = minJumpForce;
+		}
+    }
+
 	void ApplyGravity()
 	{
 		targetVelocity.y -= gravity * Time.deltaTime;
+
+		//clamp gravity:
+		if (rb.velocity.y < maxFallSpeed)
+			rb.velocity = new Vector2(rb.velocity.x, maxFallSpeed);
 	}
 
-	void Lands()
+	void CheckIfJustLanded()
 	{
-		if (jumpQueueTimer <= 0f)
-		{
-			onGround = true;
-			jumping = false;
-			targetVelocity.y = 0;
-		}
-		else
-		{
-			ApplyJump();
+		if(!isOnGroundPrevious && isOnGround)
+        {
+			isJumping = false;
+			if (jumpQueueTimer > 0f) //Automatically jumps if player has queued a jump command.
+			{
+				OnJumpInputDown();
+			}
+			else if (Falling)
+			{
+				targetVelocity.y = 0;
+			}
 		}
 	}
-
 	#endregion
 
 	#region Util
-	void CacheCalculationValues ()
-    {
 
-		onGroundPrevious = onGround;
-		onGround = raycast.OnGround;
-		UpdateFacing();
-		raycast.UpdateOriginPoints();
-	}
 
 	void UpdateFacing ()
     {
 		if (GameInput.MoveX > 0.1f)
 		{
-			facingSign = 1f;
+			facingSign = 1;
 		}
 		else if (GameInput.MoveX < -0.1f)
 		{
-			facingSign = -1f;
+			facingSign = -1;
 		}
 
-		if (MovingRight && !graphics.facingRight)
-		{
-			graphics.SetFacing(true);
-		}
-		else if (MovingLeft && graphics.facingRight)
-		{
-			graphics.SetFacing(false);
-		}
+		graphics.SetFacing(GameInput.MoveX);
 	}
 
 	void TimerUpdate()
@@ -269,15 +223,15 @@ public class Player2DController_Motor : MonoBehaviour
 
 	private void OnGUI()
     {
-        GUI.Label(new Rect(500, 20, 500, 20), "OnGround: " + onGround);
-		GUI.Label(new Rect(500, 40, 500, 20), "onGroundPrevious: " + onGroundPrevious);
+        GUI.Label(new Rect(500, 20, 500, 20), "OnGround: " + isOnGround);
+		GUI.Label(new Rect(500, 40, 500, 20), "onGroundPrevious: " + isOnGroundPrevious);
 		GUI.Label(new Rect(500, 60, 500, 20), "coyoteTimer: " + coyoteTimer);
 		GUI.Label(new Rect(500, 80, 500, 20), "jumpQueueTimer: " + jumpQueueTimer);
 		GUI.Label(new Rect(500, 100, 500, 20), "GameInput.JumpBtnDown: " + GameInput.JumpBtnDown);
 
-		GUI.Label(new Rect(500, 120, 500, 20), "jumping: " + jumping);
+		GUI.Label(new Rect(500, 120, 500, 20), "jumping: " + isJumping);
 
-		GUI.Label(new Rect(500, 140, 500, 20), "OnGround: " + onGround);
+		GUI.Label(new Rect(500, 140, 500, 20), "OnGround: " + isOnGround);
 
 		GUI.Label(new Rect(500, 160, 500, 20), "facingSign: " + facingSign);
 		GUI.Label(new Rect(500, 180, 500, 20), "GameInput.MoveX: " + GameInput.MoveX);

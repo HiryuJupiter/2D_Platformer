@@ -4,14 +4,21 @@ using System.Collections;
 
 public class Player2DController_Graphics : MonoBehaviour
 {
-    public bool facingRight { get; private set; } = true;
+    bool facingRight;
+    SpriteRenderer spriteRenderer;
 
     #region Mono
+    private void Awake()
+    {
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
+        FaceRight();
+    }
+
     void Start()
     {
 
     }
-
     void Update()
     {
 
@@ -20,27 +27,40 @@ public class Player2DController_Graphics : MonoBehaviour
 
 
     #region Public
-    public void SetFacing(bool faceRight)
+    public void SetFacing(float moveX)
     {
-        facingRight = faceRight;
-        Vector3 scale = transform.localScale;
-        scale.x = faceRight ? Mathf.Abs(scale.x) : -Mathf.Abs(scale.x);
-        transform.localScale = scale;
+        if ((moveX > 0.1f && !facingRight) ||
+            (moveX < -0.1f && facingRight))
+        {
+            Vector3 theScale = transform.localScale;
+            theScale.x *= -1;
+            transform.localScale = theScale;
+        }
     }
 
     public void SetToRed ()
     {
-
+        //spriteRenderer.color = Color.red;
     }
 
     public void SetToWhite()
     {
-
+        //spriteRenderer.color = Color.white;
     }
 
     public void SetToBlue()
     {
+        //spriteRenderer.color = Color.blue;
+    }
+    #endregion
 
+    #region Granular logic
+    void FaceRight ()
+    {
+        facingRight = true;
+        Vector3 theScale = transform.localScale;
+        theScale.x = Mathf.Abs(theScale.x);
+        transform.localScale = theScale;
     }
     #endregion
 }

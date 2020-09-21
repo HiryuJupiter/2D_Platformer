@@ -204,7 +204,8 @@ MonoBehaviour:
   moveSpeed: 15
   steeringOnGround: 50
   steeringInAir: 15
-  jumpForce: 25
+  minJumpForce: 25
+  maxJumpForce: 35
   groundLayer:
     serializedVersion: 2
     m_Bits: 512

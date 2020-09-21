@@ -7,26 +7,21 @@ public class Player2DRaycasts : MonoBehaviour
     [SerializeField] LayerMask groundLayer;
 
     //Offsets
-    Vector2 offset_BL;
-    Vector2 offset_BR;
-    Vector2 offset_TL;
-    Vector2 offset_TR;
-
-    //Cache hit data
-    RaycastHit2D hit_BL_down;
-    RaycastHit2D hit_BR_down;
-    Vector2 slopeNormal;
+    Vector2 offset_BL; //Offset bottom left
+    Vector2 offset_BR; //Offset bottom right
+    Vector2 offset_TL; //Offset top left
+    Vector2 offset_TR; //Offset top right
 
     //Const
     const float CheckDistance = 0.08f;
 
     #region Properties
-    public bool OnGround => OnGroundCheck();
-    public bool AgainstCeiling => IsAgainstCeiling();
-    public bool AgainstLeft => IsAgainstSide(true);
-    public bool AgainstRight => IsAgainstSide(false);
-    public Vector2 GroundGradient => GetGroundGradient();
+    public bool IsOnGround => OnGroundCheck();
+    public bool IsAgainstCeiling => CheckIsAgainstCeiling();
+    public bool IsAgainstLeft => IsAgainstSide(true);
+    public bool IsAgainstRight => IsAgainstSide(false);
 
+    //The final world positions (not offsets)
     public Vector2 BL { get; private set; }
     public Vector2 BR { get; private set; }
     public Vector2 TL { get; private set; }
@@ -34,26 +29,18 @@ public class Player2DRaycasts : MonoBehaviour
     #endregion
 
     #region MonoBehavior
-    private void Awake()
+    void Awake()
     {
         //Initialize offset cache
         Bounds bounds = GetComponent<Collider2D>().bounds;
-        float x = bounds.extents.x - CheckDistance / 2f;
-        float y = bounds.extents.y - CheckDistance / 2f;
+        float x = bounds.extents.x - 0.005f;
+        float y = bounds.extents.y - 0.005f;
         offset_BL = new Vector2(-x, -y);
         offset_BR = new Vector2(x, -y);
         offset_TL = new Vector2(-x, y);
         offset_TR = new Vector2(x, y);
     }
     #endregion
-
-    //public void UpdateRaycastOrigins ()
-    //{
-    //    BL = (Vector2)transform.position + offset_BL;
-    //    BR = (Vector2)transform.position + offset_BR;
-    //    TL = (Vector2)transform.position + offset_TL;
-    //    TR = (Vector2)transform.position + offset_TR;
-    //}
 
     #region Public
     public void UpdateOriginPoints()
@@ -66,27 +53,16 @@ public class Player2DRaycasts : MonoBehaviour
     #endregion
 
     #region Collision checks
-    Vector2 GetGroundGradient()
-    {
-        Vector2 p1 = hit_BL_down.point;
-        Vector2 p2 = hit_BL_down.point;
-
-        float x = p2.x - p1.x;
-        float y = p2.y - p1.y;
-
-        return new Vector2(y, -x);
-    }
-
     bool OnGroundCheck()
     {
-        hit_BL_down = Physics2D.Raycast(BL, -Vector3.up, CheckDistance, groundLayer);
-        hit_BR_down = Physics2D.Raycast(BR, -Vector3.up, CheckDistance, groundLayer);
-        Debug.DrawRay(BL, -Vector3.up * CheckDistance, Color.yellow);
-        Debug.DrawRay(BR, -Vector3.up * CheckDistance, Color.red);
+        RaycastHit2D hit_BL_down = Physics2D.Raycast(BL, -Vector3.up, CheckDistance, groundLayer);
+        RaycastHit2D hit_BR_down = Physics2D.Raycast(BR, -Vector3.up, CheckDistance, groundLayer);
+        Debug.DrawRay(BL, Vector3.down * CheckDistance, Color.yellow);
+        Debug.DrawRay(BR, Vector3.down * CheckDistance, Color.red);
         return hit_BL_down || hit_BR_down ? true : false;
     }
 
-    bool IsAgainstCeiling()
+    bool CheckIsAgainstCeiling()
     {
         RaycastHit2D hit_TL_up = Physics2D.Raycast(TL, Vector3.up, CheckDistance, groundLayer);
         RaycastHit2D hit_TR_up = Physics2D.Raycast(TR, Vector3.up, CheckDistance, groundLayer);
@@ -95,27 +71,34 @@ public class Player2DRaycasts : MonoBehaviour
         return hit_TL_up || hit_TR_up ? true : false;
     }
 
-    bool IsAgainstSide(bool left)
+    bool IsAgainstSide(bool facingRight)
     {
         RaycastHit2D bot;
         RaycastHit2D top;
 
-        if (left)
-        {
-            bot = Physics2D.Raycast(BL, Vector3.left, CheckDistance);
-            top = Physics2D.Raycast(TL, Vector3.left, CheckDistance);
-            Debug.DrawRay(BL, Vector3.left * CheckDistance, Color.green);
-            Debug.DrawRay(TL, Vector3.left * CheckDistance, Color.blue);
-        }
-        else
+        if (facingRight)
         {
             bot = Physics2D.Raycast(BR, Vector3.right, CheckDistance);
             top = Physics2D.Raycast(TR, Vector3.right, CheckDistance);
             Debug.DrawRay(BR, Vector3.right * CheckDistance, Color.green);
             Debug.DrawRay(TR, Vector3.right * CheckDistance, Color.blue);
         }
+        else
+        {
+            bot = Physics2D.Raycast(BL, Vector3.left, CheckDistance);
+            top = Physics2D.Raycast(TL, Vector3.left, CheckDistance);
+            Debug.DrawRay(BL, Vector3.left * CheckDistance, Color.green);
+            Debug.DrawRay(TL, Vector3.left * CheckDistance, Color.blue);
+        }
 
         return (bot && top) ? true : false;
     }
     #endregion
 }
+
+
+//float direction = facingRight ? 1f : -1f;
+//bot = Physics2D.Raycast(new Vector2(direction * extentX, -extentY), Vector3.right * direction, CheckDistance);
+//top = Physics2D.Raycast(new Vector2(direction * extentX, extentY), Vector3.right * direction, CheckDistance);
+//Debug.DrawRay(new Vector2(direction * extentX, -extentY), Vector3.right * direction * CheckDistance, Color.green);
+//Debug.DrawRay(new Vector2(direction * extentX,  extentY), Vector3.right * direction * CheckDistance, Color.blue);
