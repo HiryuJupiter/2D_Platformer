@@ -8,12 +8,16 @@ public class JumpModule_Burst : JumpModule
     [SerializeField] float maxJumpForce = 22f;
 
 
-    public override void StartApplyingJumpForce()
+    public override void OnBtnDown()
     {
         motor.SetVelocityY(maxJumpForce);
     }
 
-    public override void StopApplyingJumpForce()
+    public override void OnBtnHold()
+    {
+    }
+
+    public override void OnBtnUp()
     {
         if (motor.GetVelocity.y > minJumpForce)
         {

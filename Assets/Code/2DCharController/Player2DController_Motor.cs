@@ -19,8 +19,8 @@ public class Player2DController_Motor : MonoBehaviour
 	[Header("Movement")]
 	[SerializeField] float moveSpeed = 10f;
 	//[Range(0, 1)]	[SerializeField] float crouchMoveSpeed = .36f;
-	[Range(0.1f, 4f)] [SerializeField] float steeringOnGround = 1f; //50f
-	[Range(0.1f, 4f)] [SerializeField] float steeringInAir = 4f; //15
+	[Range(0.1f, 4f)] [SerializeField] float steerSpeedOnGround = 1f; //50f
+	[Range(0.1f, 4f)] [SerializeField] float steerSpeedInAir = 4f; //15
 	[SerializeField] float gravity = 80f;
 	[SerializeField] float maxFallSpeed = -2f;
 
@@ -47,17 +47,18 @@ public class Player2DController_Motor : MonoBehaviour
 	float coyoteTimer;
 	float jumpQueueTimer;
 
-	float smoothDampVelocity;
+	float moveXSmoothDampVelocity;
 
 	//Consts
 	const float SkinWidth = 0.015f;
 
 	#region Property
 	public Vector3 GetVelocity => targetVelocity;
-	float steering => isOnGround ? steeringOnGround : steeringInAir;
-	bool WalkedOffPlatform => isOnGroundPrevious && !isOnGround && !isJumping;
-	bool Falling => targetVelocity.y < 0f;
-	bool CanJump => isOnGround || (coyoteTimer > 0f && !isJumping);
+	float steerSpeed => isOnGround ? steerSpeedOnGround : steerSpeedInAir;
+	bool hasWalkedOffPlatform => isOnGroundPrevious && !isOnGround && !isJumping;
+	bool isFalling => targetVelocity.y < 0f;
+	bool canJump => isOnGround || (coyoteTimer > 0f && !isJumping);
+	bool isMovingUp => targetVelocity.y > 0f;
     #endregion
 
     #region Public
@@ -99,14 +100,52 @@ public class Player2DController_Motor : MonoBehaviour
 	{
 		raycaster.UpdateOriginPoints();
 		isOnGround = raycaster.IsOnGround;
-		if (raycaster.IsAgainstCeiling && isJumping && targetVelocity.y > 0f)
+
+		if (isMovingUp)
 		{
+			CheckForSideNudge();
+			CheckForCeilingHit();
+		}
+
+		LandingOvershootPrevention();
+	}
+
+	void CheckForSideNudge ()
+    {
+		float nudgeX = raycaster.CheckForSideNudge(targetVelocity.y * Time.deltaTime);
+		if (nudgeX != 0f)
+		{
+			Vector3 p = rb.position;
+			p.x += nudgeX;
+			rb.position = p;
+		}
+	}
+
+	void CheckForCeilingHit ()
+    {
+		if (raycaster.HitsCeiling)
+		{
+			jumpModule.OnBtnUp();
 			targetVelocity.y = 0f;
 			isJumping = false;
 		}
 	}
-	#endregion
 
+	//If falling velocity is going past the ground, retu
+	void LandingOvershootPrevention ()
+    {
+		//Stops the player from sliding on slopes on the frame that they lands.
+		if (GameInput.MoveX == 0f && targetVelocity.y < 0f)
+        {
+			float distance = raycaster.DistanceToGround(-targetVelocity.y * Time.deltaTime);
+			if (distance > 0)
+            {
+				targetVelocity.y = -distance / Time.deltaTime ;
+				isOnGround = true;
+			}
+		}
+    }
+	#endregion
 
 	#region Movement logic
 	void VerticalMoveUpdate()
@@ -120,56 +159,60 @@ public class Player2DController_Motor : MonoBehaviour
 			ApplyGravity();
 
 			//If just walked off a platform, reset coyote timer.
-			if (WalkedOffPlatform)
+			if (hasWalkedOffPlatform)
 			{
 				coyoteTimer = coyoteAllowance;
 			}
 		}
 	}
 
-
-	float moveXSmoothDampVelocity;
+	
 	void HorizontalMoveUpdate()
 	{
-		targetVelocity.x = Mathf.SmoothDamp(targetVelocity.x, GameInput.MoveX * moveSpeed, ref moveXSmoothDampVelocity, steering * Time.deltaTime);
-
-		//targetVelocity.x = Mathf.Lerp(targetVelocity.x, GameInput.MoveX * moveSpeed, steering * Time.deltaTime);
+		targetVelocity.x = Mathf.SmoothDamp(targetVelocity.x, GameInput.MoveX * moveSpeed, ref moveXSmoothDampVelocity, steerSpeed * Time.deltaTime);
 	}
 	#endregion
 
 	#region Jumping logic
 	void JumpDetection()
 	{
+		if (GameInput.JumpBtnDown)
+        {
+			if (canJump)
+			{
+				OnJumpBtnDown();
+			}
+		}
+
 		if (GameInput.JumpBtn)
 		{
-			if (CanJump)
-			{
-				OnJumpInputDown();
-			}
-			else
-			{
-				jumpQueueTimer = jumpQueueAllowance;
-			}
+			OnJumpBtnHold();
+			jumpQueueTimer = jumpQueueAllowance;
 		}
 
 		if (GameInput.JumpBtnUp)
 		{
-			OnJumpInputUp();
+			OnJumpBtnUp();
 		}
 	}
 
-	void OnJumpInputDown()
-	{
+	void OnJumpBtnDown ()
+    {
 		isJumping = true;
-		jumpModule.StartApplyingJumpForce();
 		jumpQueueTimer = -1f;
 		coyoteTimer = -1f;
+		jumpModule.OnBtnDown();
 	}
 
-	void OnJumpInputUp()
+	void OnJumpBtnHold()
+	{
+		jumpModule.OnBtnHold();
+	}
+
+	void OnJumpBtnUp()
 	{
 		isJumping = false;
-		jumpModule.StopApplyingJumpForce();
+		jumpModule.OnBtnUp();
 
 	}
 
@@ -189,9 +232,9 @@ public class Player2DController_Motor : MonoBehaviour
 			isJumping = false;
 			if (jumpQueueTimer > 0f) //Automatically jumps if player has queued a jump command.
 			{
-				OnJumpInputDown();
+				OnJumpBtnDown();
 			}
-			else if (Falling)
+			else if (isFalling)
 			{
 				targetVelocity.y = 0;
 			}

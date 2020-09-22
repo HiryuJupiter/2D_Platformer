@@ -9,8 +9,8 @@ public abstract class JumpModule: ScriptableObject
         this.motor = motor;
     }
 
-    public abstract void StartApplyingJumpForce();
-
-    public abstract void StopApplyingJumpForce();
+    public abstract void OnBtnDown();
+    public abstract void OnBtnHold();
+    public abstract void OnBtnUp();
 
 }

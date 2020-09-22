@@ -9,31 +9,71 @@ public class JumpModule_Linear : JumpModule
     [SerializeField] float jumpMaxDuration = 0.2f;
 
     float jumpTimer;
-    bool isJumping;
+    //bool isJumping;
 
-    public override void StartApplyingJumpForce()
+    public override void OnBtnDown()
     {
-        if (!isJumping)
-            motor.StartCoroutine(ContinuouslyApplyJumpForce());
+        jumpTimer = 0f;
     }
 
-    public override void StopApplyingJumpForce()
+    public override void OnBtnHold()
+    {
+        if (jumpTimer < jumpMinDuration || (GameInput.JumpBtn && jumpTimer < jumpMaxDuration))
+        {
+            motor.SetVelocityY(jumpForce);
+            jumpTimer += Time.deltaTime;
+        }
+    }
+
+    public override void OnBtnUp()
+    {
+        jumpTimer = float.MaxValue;
+    }
+}
+
+/*
+     [SerializeField] float jumpForce = 22f;
+    [SerializeField] float jumpMinDuration = 0.1f;
+    [SerializeField] float jumpMaxDuration = 0.2f;
+
+    float jumpTimer;
+    //bool isJumping;
+
+    public override void OnBtnDown()
+    {
+        if (!isJumping)
+        {
+            
+            //motor.StartCoroutine(ContinuouslyApplyJumpForce());
+        }
+    }
+
+    public override void OnBtnHold()
+    {
+        if (jumpTimer < jumpMinDuration || (GameInput.JumpBtn && jumpTimer < jumpMaxDuration))
+        {
+            motor.SetVelocityY(jumpForce);
+            jumpTimer += Time.deltaTime;
+        }
+    }
+
+    public override void OnBtnUp()
     {
         jumpTimer = float.MaxValue;
     }
 
-    IEnumerator ContinuouslyApplyJumpForce ()
-    {
-        isJumping = true;
-        jumpTimer = 0f;
+    //IEnumerator ContinuouslyApplyJumpForce ()
+    //{
+    //    isJumping = true;
+    //    jumpTimer = 0f;
 
-        while (jumpTimer < jumpMinDuration || (GameInput.JumpBtn && jumpTimer < jumpMaxDuration))
-        {
-            motor.SetVelocityY(jumpForce);
-            jumpTimer += Time.deltaTime;
-            yield return null;
-        }
+    //    while (jumpTimer < jumpMinDuration || (GameInput.JumpBtn && jumpTimer < jumpMaxDuration))
+    //    {
+    //        motor.SetVelocityY(jumpForce);
+    //        jumpTimer += Time.deltaTime;
+    //        yield return null;
+    //    }
 
-        isJumping = false;
-    }
-}
+    //    isJumping = false;
+    //}
+ */

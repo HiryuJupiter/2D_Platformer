@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bf28ab6eb48a80478269aa57a26a9f2, type: 3}
   m_Name: Jump Linear
   m_EditorClassIdentifier: 
-  jumpForce: 18
+  jumpForce: 15
   jumpMinDuration: 0
   jumpMaxDuration: 0.15
