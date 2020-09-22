@@ -60,6 +60,5 @@ public class GameInput : MonoBehaviour
     //    GUI.Label(new Rect(20, 80, 500, 20), "Right " + KeyScheme.Right);
     //    GUI.Label(new Rect(20, 110, 500, 20), "MoveX " + MoveX);
     //    GUI.Label(new Rect(20, 130, 500, 20), "MoveY " + MoveY);
-
     //}
 }

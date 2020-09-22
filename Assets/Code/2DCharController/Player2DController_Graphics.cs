@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-
+[DefaultExecutionOrder(-1)]
 public class Player2DController_Graphics : MonoBehaviour
 {
     bool facingRight;
     SpriteRenderer spriteRenderer;
+
+    int facingSign;
+
 
     #region Mono
     private void Awake()
@@ -21,22 +24,26 @@ public class Player2DController_Graphics : MonoBehaviour
     }
     void Update()
     {
-
+        UpdateFacing();
     }
     #endregion
 
-
     #region Public
-    public void SetFacing(float moveX)
+    public void UpdateFacing()
     {
-        if ((moveX > 0.1f && !facingRight) ||
-            (moveX < -0.1f && facingRight))
+        if (GameInput.MoveX > 0.1f)
         {
-            Vector3 theScale = transform.localScale;
-            theScale.x *= -1;
-            transform.localScale = theScale;
+            facingSign = 1;
         }
+        else if (GameInput.MoveX < -0.1f)
+        {
+            facingSign = -1;
+        }
+
+        SetFacing(GameInput.MoveX);
     }
+
+    
 
     public void SetToRed ()
     {
@@ -54,7 +61,18 @@ public class Player2DController_Graphics : MonoBehaviour
     }
     #endregion
 
-    #region Granular logic
+    #region Facing
+    void SetFacing(float moveX)
+    {
+        if ((moveX > 0.1f && !facingRight) ||
+            (moveX < -0.1f && facingRight))
+        {
+            Vector3 theScale = transform.localScale;
+            theScale.x *= -1;
+            transform.localScale = theScale;
+        }
+
+    }
     void FaceRight ()
     {
         facingRight = true;

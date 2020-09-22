@@ -13,7 +13,7 @@ public class Player2DRaycasts : MonoBehaviour
     Vector2 offset_TR; //Offset top right
 
     //Const
-    const float CheckDistance = 0.08f;
+    const float CheckDistance = 0.06f;
 
     #region Properties
     public bool IsOnGround => OnGroundCheck();

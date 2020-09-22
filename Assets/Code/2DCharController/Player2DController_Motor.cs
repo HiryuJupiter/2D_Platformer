@@ -1,47 +1,42 @@
+﻿using UnityEngine;
 using System.Collections;
-using UnityEngine;
-using UnityEngine.Events;
+using JetBrains.Annotations;
 
 /*Coyote time: A short time period allows the player to jump after walking off a platform.
 Jump queue timer: Allows the player to "cache" the jump command when pressing jump right before land on ground.
 Jumping and OnGround are two different situations that doesn't always overlap. After pressing jump, you're still onground for a few frames
 due to the raycast distance. And you can also walk off a platform that cause you to become not-on-ground and no-jumping.
-
  */
 
-
-
+[DefaultExecutionOrder(-1)]
 [RequireComponent(typeof(Player2DRaycasts))]
-[RequireComponent(typeof(Player2DController_Graphics))]
+[RequireComponent(typeof(JumpModule))]
 public class Player2DController_Motor : MonoBehaviour
 {
-	[Header("Movement")]
-	[SerializeField] float moveSpeed = 15f;
-	//[Range(0, 1)]	[SerializeField] float crouchMoveSpeed = .36f;
-	[Range(5f, 50f)] [SerializeField] float steeringOnGround = 50f;
-	[Range(5f, 50f)] [SerializeField] float steeringInAir = 15f;
-	[SerializeField] float gravity = 100f;
-	[SerializeField] float maxFallSpeed = -10f;
-
-	[Header("Jumping")]
-	[SerializeField] float minJumpForce = 25f;
-	[SerializeField] float maxJumpForce = 35f;
-
-	[Header("Environment check")]
-	[SerializeField] LayerMask groundLayer;
-	
-
-
-	float coyoteAllowance = 0.2f;
-	float jumpQueueAllowance = 0.2f;
-
 	//[Header("References")]
 	//[SerializeField] Collider2D collider_standing;
 
-	//Components and classes
-	Player2DController_Graphics graphics;
+	[Header("Movement")]
+	[SerializeField] float moveSpeed = 10f;
+	//[Range(0, 1)]	[SerializeField] float crouchMoveSpeed = .36f;
+	[Range(0.1f, 4f)] [SerializeField] float steeringOnGround = 1f; //50f
+	[Range(0.1f, 4f)] [SerializeField] float steeringInAir = 4f; //15
+	[SerializeField] float gravity = 80f;
+	[SerializeField] float maxFallSpeed = -2f;
+
+	[Header("Jumping")]
+	[SerializeField] JumpModule jumpModule;
+
+	[Header("Environment check")]
+	[SerializeField] LayerMask groundLayer;
+
+	//Reference
 	Player2DRaycasts raycaster;
 	Rigidbody2D rb;
+
+	//Stats
+	float coyoteAllowance = 0.2f;
+	float jumpQueueAllowance = 0.05f;
 
 	//Status
 	Vector3 targetVelocity;
@@ -49,38 +44,44 @@ public class Player2DController_Motor : MonoBehaviour
 	bool isOnGroundPrevious;
 	bool isJumping;
 
-	float coyoteTimer; 
+	float coyoteTimer;
 	float jumpQueueTimer;
 
-	int facingSign;
-
-	//Ignore
 	float smoothDampVelocity;
 
 	//Consts
 	const float SkinWidth = 0.015f;
 
 	#region Property
+	public Vector3 GetVelocity => targetVelocity;
 	float steering => isOnGround ? steeringOnGround : steeringInAir;
 	bool WalkedOffPlatform => isOnGroundPrevious && !isOnGround && !isJumping;
-	bool Falling => rb.velocity.y < 0f;
+	bool Falling => targetVelocity.y < 0f;
 	bool CanJump => isOnGround || (coyoteTimer > 0f && !isJumping);
-	#endregion
+    #endregion
 
-	#region MonoBehavior
-	void Awake()
+    #region Public
+	public void SetVelocityY (float y)
+    {
+		targetVelocity.y = y;
+    }
+    #endregion
+
+    #region MonoBehiavor
+    void Awake()
 	{
 		rb = GetComponent<Rigidbody2D>();
 		raycaster = GetComponent<Player2DRaycasts>();
-		graphics = GetComponent<Player2DController_Graphics>();
+		jumpModule.Initialize(this);
 	}
 
-    void Update()
-    {
+	void Update()
+	{
 		JumpDetection();
 		TimerUpdate();
 	}
-    void FixedUpdate()
+
+	void FixedUpdate()
 	{
 		PhysicsCheck();
 
@@ -89,26 +90,33 @@ public class Player2DController_Motor : MonoBehaviour
 		VerticalMoveUpdate();
 
 		rb.velocity = targetVelocity;
+		isOnGroundPrevious = isOnGround;
 	}
 	#endregion
 
-
+	#region Pre-check
 	void PhysicsCheck()
 	{
 		raycaster.UpdateOriginPoints();
 		isOnGround = raycaster.IsOnGround;
-		UpdateFacing();
+		if (raycaster.IsAgainstCeiling && isJumping && targetVelocity.y > 0f)
+		{
+			targetVelocity.y = 0f;
+			isJumping = false;
+		}
 	}
+	#endregion
 
-	#region Movement updates
-	void VerticalMoveUpdate ()
-    {
+
+	#region Movement logic
+	void VerticalMoveUpdate()
+	{
 		if (isOnGround)
-        {
+		{
 			CheckIfJustLanded();
 		}
 		else
-        {
+		{
 			ApplyGravity();
 
 			//If just walked off a platform, reset coyote timer.
@@ -120,63 +128,64 @@ public class Player2DController_Motor : MonoBehaviour
 	}
 
 
-	void HorizontalMoveUpdate ()
-    {
-		targetVelocity.x = Mathf.Lerp(targetVelocity.x, GameInput.MoveX * moveSpeed, steering * Time.deltaTime);
-	}
+	float moveXSmoothDampVelocity;
+	void HorizontalMoveUpdate()
+	{
+		targetVelocity.x = Mathf.SmoothDamp(targetVelocity.x, GameInput.MoveX * moveSpeed, ref moveXSmoothDampVelocity, steering * Time.deltaTime);
 
+		//targetVelocity.x = Mathf.Lerp(targetVelocity.x, GameInput.MoveX * moveSpeed, steering * Time.deltaTime);
+	}
+	#endregion
+
+	#region Jumping logic
 	void JumpDetection()
-    {
-        if (GameInput.JumpBtnDown)
-        {
+	{
+		if (GameInput.JumpBtn)
+		{
 			if (CanJump)
-            {
+			{
 				OnJumpInputDown();
 			}
 			else
-            {
+			{
 				jumpQueueTimer = jumpQueueAllowance;
 			}
-        }
+		}
 
 		if (GameInput.JumpBtnUp)
-        {
+		{
 			OnJumpInputUp();
 		}
-    }
-	#endregion
+	}
 
-	#region Movement logic
 	void OnJumpInputDown()
 	{
 		isJumping = true;
-		targetVelocity.y = maxJumpForce;
+		jumpModule.StartApplyingJumpForce();
 		jumpQueueTimer = -1f;
 		coyoteTimer = -1f;
 	}
 
-	void OnJumpInputUp ()
-    {
+	void OnJumpInputUp()
+	{
 		isJumping = false;
-		if (targetVelocity.y > minJumpForce)
-        {
-			targetVelocity.y = minJumpForce;
-		}
-    }
+		jumpModule.StopApplyingJumpForce();
+
+	}
 
 	void ApplyGravity()
 	{
 		targetVelocity.y -= gravity * Time.deltaTime;
 
 		//clamp gravity:
-		if (rb.velocity.y < maxFallSpeed)
-			rb.velocity = new Vector2(rb.velocity.x, maxFallSpeed);
+		if (targetVelocity.y < maxFallSpeed)
+			targetVelocity = new Vector2(targetVelocity.x, maxFallSpeed);
 	}
 
 	void CheckIfJustLanded()
 	{
-		if(!isOnGroundPrevious && isOnGround)
-        {
+		if (!isOnGroundPrevious && isOnGround)
+		{
 			isJumping = false;
 			if (jumpQueueTimer > 0f) //Automatically jumps if player has queued a jump command.
 			{
@@ -191,22 +200,6 @@ public class Player2DController_Motor : MonoBehaviour
 	#endregion
 
 	#region Util
-
-
-	void UpdateFacing ()
-    {
-		if (GameInput.MoveX > 0.1f)
-		{
-			facingSign = 1;
-		}
-		else if (GameInput.MoveX < -0.1f)
-		{
-			facingSign = -1;
-		}
-
-		graphics.SetFacing(GameInput.MoveX);
-	}
-
 	void TimerUpdate()
 	{
 		if (coyoteTimer > 0f)
@@ -222,8 +215,8 @@ public class Player2DController_Motor : MonoBehaviour
 	#endregion
 
 	private void OnGUI()
-    {
-        GUI.Label(new Rect(500, 20, 500, 20), "OnGround: " + isOnGround);
+	{
+		GUI.Label(new Rect(500, 20, 500, 20), "OnGround: " + isOnGround);
 		GUI.Label(new Rect(500, 40, 500, 20), "onGroundPrevious: " + isOnGroundPrevious);
 		GUI.Label(new Rect(500, 60, 500, 20), "coyoteTimer: " + coyoteTimer);
 		GUI.Label(new Rect(500, 80, 500, 20), "jumpQueueTimer: " + jumpQueueTimer);
@@ -233,14 +226,8 @@ public class Player2DController_Motor : MonoBehaviour
 
 		GUI.Label(new Rect(500, 140, 500, 20), "OnGround: " + isOnGround);
 
-		GUI.Label(new Rect(500, 160, 500, 20), "facingSign: " + facingSign);
 		GUI.Label(new Rect(500, 180, 500, 20), "GameInput.MoveX: " + GameInput.MoveX);
 
 		GUI.Label(new Rect(500, 200, 500, 20), "targetVelocity: " + targetVelocity);
-		
-
-
-
-
 	}
 }
