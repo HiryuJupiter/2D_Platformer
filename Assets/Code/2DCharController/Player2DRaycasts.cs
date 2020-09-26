@@ -114,7 +114,7 @@ public class Player2DRaycasts : MonoBehaviour
         }
     }
 
-    public float CheckForSideNudge(float yVelocity)
+    public float CheckForCeilingSideNudge(float yVelocity)
     {
         //If 
         bool L_inner= Raycast(TL_inner, Vector2.up, yVelocity, groundLayer, Color.cyan);
