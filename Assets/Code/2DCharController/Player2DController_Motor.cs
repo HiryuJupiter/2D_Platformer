@@ -110,14 +110,19 @@ public class Player2DController_Motor : MonoBehaviour
         UpdateFacingSign();
 		PhysicsCheck();
 
-		//Move
+		//Horizontal move
 		UpdateHorizontalMove();
-		UpdateGravity();
 
+		//Vertical move
+		LandingOvershootPrevention();
+		UpdateGravity();
+		
+
+		//Slope
 		if (stickyGround && !isJumping)
         {
-			//StickToGround();
-		}
+            StickToGround();
+        }		
 
 		rb.velocity = currentVelocity;
 		isOnGroundPrevious = isOnGround;
@@ -136,8 +141,6 @@ public class Player2DController_Motor : MonoBehaviour
 			NudgeAwayFromCeilingEdge();
 			CheckForCeilingHit();
 		}
-
-		LandingOvershootPrevention();
 	}
 
 	void NudgeAwayFromCeilingEdge ()
@@ -161,41 +164,10 @@ public class Player2DController_Motor : MonoBehaviour
 		}
 	}
 
-	//Stops the player from sliding on slopes on the frame that they lands.
-	void LandingOvershootPrevention () 
-    {
-		//If falling while not moving sideways...
-		if (movingSign == 0f && currentVelocity.y < 0f)
-        {
-			//And the falling velocity is going past the ground, then reduce the velocity.
-			float distance = raycaster.DistanceToGround(-currentVelocity.y * Time.deltaTime);
-			if (distance > 0)
-            {
-				currentVelocity.y = -distance / Time.deltaTime ;
-				isOnGround = true;
-			}
-		}
-    }
 	#endregion
 
 	#region Movement logic
-	void UpdateGravity()
-	{
-		if (isOnGround)
-		{
-			CheckIfJustLanded();
-		}
-		else
-		{
-			ApplyGravity();
 
-			//If just walked off a platform, reset coyote timer.
-			if (hasWalkedOffPlatform)
-			{
-				ResetCoyoteTimer();
-			}
-		}
-	}
 
 	float moveXSmoothDampVelocity;
 	void UpdateHorizontalMove()
@@ -207,18 +179,14 @@ public class Player2DController_Motor : MonoBehaviour
 	#region Jumping logic
 	void JumpDetection()
 	{
-		if (GameInput.JumpBtnDown)
+		if (GameInput.JumpBtnDown && canJump)
         {
-			if (canJump)
-			{
-				OnJumpBtnDown();
-			}
+			OnJumpBtnDown();
 		}
 
 		if (GameInput.JumpBtn)
 		{
 			OnJumpBtnHold();
-			jumpQueueTimer = jumpQueueAllowance;
 		}
 
 		if (GameInput.JumpBtnUp)
@@ -237,23 +205,20 @@ public class Player2DController_Motor : MonoBehaviour
 
 	void OnJumpBtnHold()
 	{
+		jumpQueueTimer = jumpQueueAllowance;
 		jumpModule.OnBtnHold();
 	}
 
 	void OnJumpBtnUp()
 	{
-		isJumping = false;
+		//isJumping = false;
 		jumpModule.OnBtnUp();
-
 	}
 
 	void ApplyGravity()
 	{
 		currentVelocity.y -= gravity * Time.deltaTime;
-
-		//clamp gravity:
-		if (currentVelocity.y < maxFallSpeed)
-			currentVelocity = new Vector2(currentVelocity.x, maxFallSpeed);
+		currentVelocity.y = Mathf.Clamp(currentVelocity.y, maxFallSpeed, currentVelocity.y);
 	}
 
 	void CheckIfJustLanded()
@@ -273,24 +238,66 @@ public class Player2DController_Motor : MonoBehaviour
 	}
 	#endregion
 
-	#region Slop handling
-	
+	#region Gravity & Landing
+	void UpdateGravity()
+	{
+		if (isOnGround)
+		{
+			CheckIfJustLanded();
+		}
+		else
+		{
+			ApplyGravity();
+
+			//If just walked off a platform, reset coyote timer.
+			if (hasWalkedOffPlatform)
+			{
+				ResetCoyoteTimer();
+			}
+		}
+	}
+
+	float testLocation = -1;
+	//Stops the player from sliding on slopes on the frame that they lands.
+	void LandingOvershootPrevention()
+	{
+		testLocation = -1;
+		//If falling while not moving sideways...
+		if (movingSign == 0f && currentVelocity.y < 0f)
+		{
+			//And the falling velocity is going past the ground, then reduce the velocity.
+			float distance = raycaster.DistanceToGround(-currentVelocity.y * Time.deltaTime);
+			testLocation = distance;
+
+			if (distance > 0)
+			{
+				testLocation = 2;
+
+				currentVelocity.y = -distance / Time.deltaTime;
+				isOnGround = true;
+			}
+		}
+	}
+	#endregion
+
+	#region Slope handling
 	void StickToGround ()
     {
 		if (isMoving)
 		{
-			//Climb slope 
+			//Prioritize checking if climbing slope 
 			climbingSlope = false;
 			Vector2 frontfoot = movingSign > 0 ? raycaster.BR : raycaster.BL;
 			AscendingSlope(frontfoot);
 			
 			if (!climbingSlope)
 			{
-				//Desecend slope
+				//Check if can descend slope if not currently climbing one
 				descendingSlope = false;
 				Vector2 backfoot = movingSign > 0 ? raycaster.BL : raycaster.BR;
 				StickToDecendingSlope(backfoot);
 
+				//This prevents "car-flies-over-ramp" effect when finishing climbing.
 				if (!descendingSlope && !isOnGround)
                 {
 					//Stick to ground
@@ -316,7 +323,6 @@ public class Player2DController_Motor : MonoBehaviour
 		RaycastHit2D hit = Physics2D.Raycast(origin, Vector3.right * movingSign, Mathf.Abs(currentVelocity.x) * Time.deltaTime, groundLayer);
 
 		Debug.DrawRay(origin, new Vector3(currentVelocity.x * Time.deltaTime, 0f, 0f), Color.cyan);
-
 		
 		if (hit)
         {
@@ -340,7 +346,7 @@ public class Player2DController_Motor : MonoBehaviour
 				float displaceX = Mathf.Cos(slopeAngle * Mathf.Deg2Rad) * climbDistance * movingSign;
                 float displaceY = Mathf.Sin(slopeAngle * Mathf.Deg2Rad) * climbDistance;
                 newVelocity.x += displaceX;
-                newVelocity.y += displaceY;
+                newVelocity.y = displaceY;
 
                 currentVelocity = newVelocity;
             }
@@ -350,7 +356,6 @@ public class Player2DController_Motor : MonoBehaviour
 	void StickToDecendingSlope(Vector2 origin)
 	{
 		RaycastHit2D hit = Physics2D.Raycast(origin, Vector3.down, decendSlopeCheckDist * Time.deltaTime, groundLayer); 
-		
 		
 		if (hit)
 		{
@@ -371,13 +376,13 @@ public class Player2DController_Motor : MonoBehaviour
 						currentVelocity.x = Mathf.Cos(slopeAngle * Mathf.Deg2Rad) * moveSpeed * movingSign;
 						currentVelocity.y = -Mathf.Sin(slopeAngle * Mathf.Deg2Rad) * moveSpeed;
 
-						if (slopeAngle != slopeAngleOld)
+                        if (slopeAngle != slopeAngleOld)
                         {
-							//Make the player move towards the slop if it is hovering above it
-							//We use slopAngleOld for performance optimization
-							currentVelocity.y -= (hit.distance - SkinWidth) / Time.deltaTime;
-						}
-					}
+                            //Make the player move towards the slop if it is hovering above it
+                            //We use slopAngleOld for performance optimization
+                            currentVelocity.y -= (hit.distance - SkinWidth) / Time.deltaTime;
+                        }
+                    }
 				}
 			}
 		}
@@ -432,6 +437,10 @@ public class Player2DController_Motor : MonoBehaviour
 		GUI.Label(new Rect(300, 40,		290, 20), "jumpQueueTimer: " + jumpQueueTimer);
 		GUI.Label(new Rect(300, 60,		290, 20), "GameInput.JumpBtnDown: " + GameInput.JumpBtnDown);
 		GUI.Label(new Rect(300, 80,		290, 20), "jumping: " + isJumping);
+
+		GUI.Label(new Rect(300, 120,		290, 20), "testLocation: " + testLocation);
+
+		
 
 		GUI.Label(new Rect(500, 0,		290, 20), "=== SLOPE === ");
 		GUI.Label(new Rect(500, 20,	290, 20), "decending: " + descendingSlope);
