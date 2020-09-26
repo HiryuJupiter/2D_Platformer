@@ -8,6 +8,12 @@ Jumping and OnGround are two different situations that doesn't always overlap. A
 due to the raycast distance. And you can also walk off a platform that cause you to become not-on-ground and no-jumping.
  */
 
+/*
+//For all slope movements, we use the maximum speed, moveSpeed, instead of currentVelocity that gets reduced by
+//smoothDamp, as you're lerping from the slope climbing/descending x-positional displacement towards the maxspeed,
+//which will make the slower than what it should be
+ */
+
 [DefaultExecutionOrder(-1)]
 [RequireComponent(typeof(Player2DRaycasts))]
 [RequireComponent(typeof(JumpModule))]
@@ -15,6 +21,7 @@ public class Player2DController_Motor : MonoBehaviour
 {
 	//[Header("References")]
 	//[SerializeField] Collider2D collider_standing;
+	public bool stickyGround = true;
 
 	[Header("Movement")]
 	[SerializeField] float moveSpeed = 10f;
@@ -48,20 +55,20 @@ public class Player2DController_Motor : MonoBehaviour
 	bool isOnGroundPrevious;
 	bool isJumping;
 	int movingSign;
-	bool debug_Decending;
 
 	float coyoteTimer;
 	float jumpQueueTimer;
 
-	float moveXSmoothDampVelocity;
-
+	bool descendingSlope;
+	bool climbingSlope;
+	float slopeAngleOld;
 	float slopeAngle;
 
 	//Cache
 	float decendSlopeCheckDist;
 
 	//Consts
-	const float SkinWidth = 0.015f;
+	const float SkinWidth = 0.005f;
 
 
 	#region Property
@@ -71,9 +78,10 @@ public class Player2DController_Motor : MonoBehaviour
 	bool isFalling => currentVelocity.y < 0f;
 	bool canJump => isOnGround || (coyoteTimer > 0f && !isJumping);
 	bool isMovingUp => currentVelocity.y > 0f;
+	bool isMoving => movingSign != 0;
     #endregion
 
-    #region Public
+	#region Public
 	public void SetVelocityY (float y)
     {
 		currentVelocity.y = y;
@@ -83,9 +91,8 @@ public class Player2DController_Motor : MonoBehaviour
     #region MonoBehiavor
     void Awake()
 	{
-		//The maximum y distance for raycasting down, based on max slope level and max move Speed.
+		//Caching the maximum raycast distance for slope calculations, based on max slope level and max move Speed.
 		decendSlopeCheckDist = moveSpeed * Mathf.Tan(maxSlope * Mathf.Deg2Rad);
-
 
 		rb = GetComponent<Rigidbody2D>();
 		raycaster = GetComponent<Player2DRaycasts>();
@@ -95,21 +102,26 @@ public class Player2DController_Motor : MonoBehaviour
 	void Update()
 	{
 		JumpDetection();
-		TimerUpdate();
+		UpdateTimer();
 	}
 
 	void FixedUpdate()
 	{
-        FacingSignCheck();
+        UpdateFacingSign();
 		PhysicsCheck();
 
 		//Move
-		HorizontalMoveUpdate();
-		GravityUpdate();
-		SlopeHandling();
+		UpdateHorizontalMove();
+		UpdateGravity();
+
+		if (stickyGround && !isJumping)
+        {
+			//StickToGround();
+		}
 
 		rb.velocity = currentVelocity;
 		isOnGroundPrevious = isOnGround;
+		slopeAngleOld = slopeAngle;
 	}
 	#endregion
 
@@ -128,7 +140,6 @@ public class Player2DController_Motor : MonoBehaviour
 		LandingOvershootPrevention();
 	}
 
-	//Ceiling nudge
 	void NudgeAwayFromCeilingEdge ()
     {
 		float nudgeX = raycaster.CheckForCeilingSideNudge(currentVelocity.y * Time.deltaTime);
@@ -168,7 +179,7 @@ public class Player2DController_Motor : MonoBehaviour
 	#endregion
 
 	#region Movement logic
-	void GravityUpdate()
+	void UpdateGravity()
 	{
 		if (isOnGround)
 		{
@@ -181,12 +192,13 @@ public class Player2DController_Motor : MonoBehaviour
 			//If just walked off a platform, reset coyote timer.
 			if (hasWalkedOffPlatform)
 			{
-				coyoteTimer = coyoteAllowance;
+				ResetCoyoteTimer();
 			}
 		}
 	}
-		
-	void HorizontalMoveUpdate()
+
+	float moveXSmoothDampVelocity;
+	void UpdateHorizontalMove()
 	{
 		currentVelocity.x = Mathf.SmoothDamp(currentVelocity.x, GameInput.MoveX * moveSpeed, ref moveXSmoothDampVelocity, steerSpeed * Time.deltaTime);
 	}
@@ -262,32 +274,84 @@ public class Player2DController_Motor : MonoBehaviour
 	#endregion
 
 	#region Slop handling
-	void SlopeHandling ()
+	
+	void StickToGround ()
     {
-		if (currentVelocity.y <= 0f)
+		if (isMoving)
 		{
-			if (movingSign != 0) //Player is pressing a move command.
-            {
-				Vector2 origin = movingSign > 0 ? raycaster.BL : raycaster.BR; //The origin should be the backfoot
-				StickToDecendingSlope(origin);
-			}
-			else if (isOnGround)
-            {
-				location = -1;
-				//targetVelocity.x = 0f;
-				currentVelocity.y = 0f;
+			//Climb slope 
+			climbingSlope = false;
+			Vector2 frontfoot = movingSign > 0 ? raycaster.BR : raycaster.BL;
+			AscendingSlope(frontfoot);
+			
+			if (!climbingSlope)
+			{
+				//Desecend slope
+				descendingSlope = false;
+				Vector2 backfoot = movingSign > 0 ? raycaster.BL : raycaster.BR;
+				StickToDecendingSlope(backfoot);
 
-				//targetVelocity = Vector3.zero;
+				if (!descendingSlope && !isOnGround)
+                {
+					//Stick to ground
+					if (currentVelocity.y > 0f)
+					{
+						currentVelocity.y = 0f;
+					}
+                }
+			}
+		}
+		else
+        {
+			if (isOnGround)
+			{
+				//Don't let player slide down a slope by gravity.
+				currentVelocity.y = 0f;
 			}
 		}
 	}
 
-	int location = -1;
+	void AscendingSlope (Vector2 origin)
+	{
+		RaycastHit2D hit = Physics2D.Raycast(origin, Vector3.right * movingSign, Mathf.Abs(currentVelocity.x) * Time.deltaTime, groundLayer);
+
+		Debug.DrawRay(origin, new Vector3(currentVelocity.x * Time.deltaTime, 0f, 0f), Color.cyan);
+
+		
+		if (hit)
+        {
+			Debug.DrawRay(hit.point, hit.normal, Color.green);
+
+            float slopeAngle = Vector2.Angle(Vector2.up, hit.normal);
+            if (slopeAngle != 0 && slopeAngle < maxSlope)
+            {
+                climbingSlope = true;
+                Vector3 newVelocity = Vector3.zero;
+                float gapDist = 0f;
+                //If there is space between you and the slope, then move right up against it.
+                if (slopeAngle != slopeAngleOld) //For optimization, only do once per slope
+                {
+                    gapDist = hit.distance - SkinWidth;
+                    newVelocity.x = gapDist / Time.deltaTime * movingSign;
+                }
+                //Take the full VelocityX, minus the gap distance, then use the remaining velocity X...
+                //...to calculate slope climbing. 
+                float climbDistance = moveSpeed - gapDist; //climbDistance is also the hypotenues
+				float displaceX = Mathf.Cos(slopeAngle * Mathf.Deg2Rad) * climbDistance * movingSign;
+                float displaceY = Mathf.Sin(slopeAngle * Mathf.Deg2Rad) * climbDistance;
+                newVelocity.x += displaceX;
+                newVelocity.y += displaceY;
+
+                currentVelocity = newVelocity;
+            }
+        }
+	}
+
 	void StickToDecendingSlope(Vector2 origin)
 	{
-		RaycastHit2D hit = Physics2D.Raycast(origin, Vector3.down, 10f, groundLayer); //20f is an arbitrary large number.
+		RaycastHit2D hit = Physics2D.Raycast(origin, Vector3.down, decendSlopeCheckDist * Time.deltaTime, groundLayer); 
 		
-		debug_Decending = false;
+		
 		if (hit)
 		{
 			slopeAngle = Vector2.Angle(Vector2.up, hit.normal);
@@ -297,18 +361,23 @@ public class Player2DController_Motor : MonoBehaviour
 				//See if we're decending the slope, by checking if we are facing the same x-direction as the slope normal
 				if (Mathf.Sign(hit.normal.x) == movingSign)
 				{
-					debug_Decending = true;
+					descendingSlope = true;
 					//Check if we are standing close enough to the platform to begin decend calculation. 
-					float descendableRange = decendSlopeCheckDist * Time.deltaTime;
-					if (hit.distance - SkinWidth < descendableRange)
+					//float descendableRange = decendSlopeCheckDist ;
+					//if (hit.distance - SkinWidth < descendableRange)
 					{
 						//Specify the decend amount
 						//Btw we're using max move speed (moveSpeed) instead of currentVelocity.x because it is reduced by smoothdamp.
 						currentVelocity.x = Mathf.Cos(slopeAngle * Mathf.Deg2Rad) * moveSpeed * movingSign;
 						currentVelocity.y = -Mathf.Sin(slopeAngle * Mathf.Deg2Rad) * moveSpeed;
-						//Make the player move towards the slop if it is hovering above it
-						currentVelocity.y -= (hit.distance - SkinWidth - SkinWidth)  / Time.deltaTime ; 
-                    }
+
+						if (slopeAngle != slopeAngleOld)
+                        {
+							//Make the player move towards the slop if it is hovering above it
+							//We use slopAngleOld for performance optimization
+							currentVelocity.y -= (hit.distance - SkinWidth) / Time.deltaTime;
+						}
+					}
 				}
 			}
 		}
@@ -316,7 +385,7 @@ public class Player2DController_Motor : MonoBehaviour
 	#endregion
 
 	#region Util
-	void TimerUpdate()
+	void UpdateTimer()
 	{
 		if (coyoteTimer > 0f)
 		{
@@ -329,7 +398,7 @@ public class Player2DController_Motor : MonoBehaviour
 		}
 	}
 
-	void FacingSignCheck ()
+	void UpdateFacingSign ()
     {
 		if (GameInput.MoveX > 0.1f)
 		{
@@ -344,15 +413,17 @@ public class Player2DController_Motor : MonoBehaviour
 			movingSign = 0;
         }
 	}
+	void ResetCoyoteTimer() => coyoteTimer = coyoteAllowance;
 	#endregion
 
-	
 	private void OnGUI()
 	{
 		GUI.Label(new Rect(20, 0,		290, 20), "=== GROUND MOVE === ");
 		GUI.Label(new Rect(20, 20,		290, 20), "OnGround: " + isOnGround);
 		GUI.Label(new Rect(20, 40,		290, 20), "onGroundPrevious: " + isOnGroundPrevious);
 		GUI.Label(new Rect(20, 60,		290, 20), "GameInput.MoveX: " + GameInput.MoveX);
+		GUI.Label(new Rect(20, 80, 290, 20), "movingSign: " + movingSign);
+
 
 		GUI.Label(new Rect(20, 120, 290, 20), "targetVelocity: " + currentVelocity);
 
@@ -363,8 +434,8 @@ public class Player2DController_Motor : MonoBehaviour
 		GUI.Label(new Rect(300, 80,		290, 20), "jumping: " + isJumping);
 
 		GUI.Label(new Rect(500, 0,		290, 20), "=== SLOPE === ");
-		GUI.Label(new Rect(500, 20,	290, 20), "decending: " + debug_Decending);
-		GUI.Label(new Rect(500, 40,	290, 20), "slopeAngle: " + slopeAngle);
-		GUI.Label(new Rect(500, 60, 290, 20), "location: " + location);
+		GUI.Label(new Rect(500, 20,	290, 20), "decending: " + descendingSlope);
+		GUI.Label(new Rect(500, 40, 290, 20), "climbingSlope: " + climbingSlope);
+		GUI.Label(new Rect(500, 60,	290, 20), "slopeAngle: " + slopeAngle);
 	}
 }
