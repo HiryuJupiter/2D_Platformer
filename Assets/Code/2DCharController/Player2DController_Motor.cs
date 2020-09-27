@@ -101,12 +101,14 @@ public class Player2DController_Motor : MonoBehaviour, IPlayer2DControllerMotor
 
 	void Update()
 	{
+		
 		JumpDetection();
 		UpdateTimer();
 	}
 
 	void FixedUpdate()
 	{
+		raycaster.UpdateOriginPoints();
 		UpdateFacingSign();
 		PhysicsCheck();
 
@@ -174,7 +176,6 @@ public class Player2DController_Motor : MonoBehaviour, IPlayer2DControllerMotor
 	#region Pre-check
 	void PhysicsCheck()
 	{
-		raycaster.UpdateOriginPoints();
 		isOnGround = raycaster.IsOnGround;
 
 		if (isMovingUp)
@@ -247,13 +248,12 @@ public class Player2DController_Motor : MonoBehaviour, IPlayer2DControllerMotor
 				RaycastHit2D right = Physics2D.Raycast(raycaster.BR, Vector2.down, -currentVelocity.y * Time.deltaTime, groundLayer);
 				Debug.DrawRay(right.point, Vector3.right, Color.magenta);
 
-				//Debug.Log("currentVelocity.y: " + currentVelocity.y + ", distance: " + -distance + ", -distance / Time.deltaTime: " + -distance / Time.deltaTime);
-				//currentVelocity.y = (-distance); //THis is good
-				//currentVelocity.y = (-distance - SkinWidth);
-				//currentVelocity.y = (-distance + SkinWidth);
-				currentVelocity.y = (-distance + SkinWidth) / Time.deltaTime;
-
-				//isOnGround = true;
+                //Debug.Log("currentVelocity.y: " + currentVelocity.y + ", distance: " + -distance + ", -distance / Time.deltaTime: " + -distance / Time.deltaTime);
+                currentVelocity.y = (-distance); //THis is absolutely perfct in Non-interpolate. Interpolation does make the character slide upon landing, but this is by far the best option.
+                //currentVelocity.y = (-distance - SkinWidth);
+                //currentVelocity.y = (-distance + SkinWidth); //Extremely good
+                //currentVelocity.y = (-distance + SkinWidth) / Time.deltaTime;
+                //Debug.DrawRay((Vector3)raycaster.BR - Vector3.down * currentVelocity.y * Time.deltaTime, Vector3.right, Color.cyan);
 			}
 		}
 	}

@@ -71,9 +71,17 @@ public class Player2DRaycasts : MonoBehaviour
         TR_outer = (Vector2)transform.position + offset_TR_outer;
         TL_inner = (Vector2)transform.position + offset_TL_inner;
         TR_inner = (Vector2)transform.position + offset_TR_inner;
+
+        //Debug
+        Debug.DrawRay(BL, Vector3.left, Color.blue);
+        Debug.DrawRay(BR, Vector3.right, Color.blue);
+        Debug.DrawRay(TL_outer, Vector3.left, Color.blue);
+        Debug.DrawRay(TR_outer, Vector3.right, Color.blue);
+        Debug.DrawRay(TL_inner, Vector3.left, Color.blue);
+        Debug.DrawRay(TR_inner, Vector3.right, Color.blue);
     }
 
-    
+
     public float DistanceToGround (float yVelocity)
     {
         //Find the position this object would be when on the ground. 
