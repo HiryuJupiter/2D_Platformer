@@ -122,7 +122,7 @@ public class Player2DController_Motor : MonoBehaviour
 		//Slope
 		if (stickyGround && !isJumping)
         {
-            StickToGround();
+            //StickToGround();
         }		
 
 		rb.velocity = currentVelocity;
@@ -241,9 +241,20 @@ public class Player2DController_Motor : MonoBehaviour
 			float distance = raycaster.DistanceToGround(-currentVelocity.y * Time.deltaTime);
 			if (distance > 0)
 			{
-				currentVelocity.y = -distance / Time.deltaTime;
-				isOnGround = true;
-			}
+				Debug.DrawRay(raycaster.BR, Vector3.right, Color.yellow);
+				Debug.DrawRay((Vector3)raycaster.BR - Vector3.down * currentVelocity.y * Time.deltaTime, Vector3.right, Color.green);
+
+				RaycastHit2D right = Physics2D.Raycast(raycaster.BR, Vector2.down, -currentVelocity.y * Time.deltaTime, groundLayer);
+				Debug.DrawRay(right.point, Vector3.right, Color.magenta);
+
+				//Debug.Log("currentVelocity.y: " + currentVelocity.y + ", distance: " + -distance + ", -distance / Time.deltaTime: " + -distance / Time.deltaTime);
+				//currentVelocity.y = (-distance); //THis is good
+                //currentVelocity.y = (-distance - SkinWidth);
+                //currentVelocity.y = (-distance + SkinWidth);
+                currentVelocity.y = (-distance + SkinWidth) / Time.deltaTime;
+
+                //isOnGround = true;
+            }
 		}
 	}
 
@@ -362,13 +373,13 @@ public class Player2DController_Motor : MonoBehaviour
 						//Btw we're using max move speed (moveSpeed) instead of currentVelocity.x because it is reduced by smoothdamp.
 						currentVelocity.x = Mathf.Cos(slopeAngle * Mathf.Deg2Rad) * moveSpeed * movingSign;
 						currentVelocity.y = -Mathf.Sin(slopeAngle * Mathf.Deg2Rad) * moveSpeed;
-
-                        if (slopeAngle != slopeAngleOld)
-                        {
-                            //Make the player move towards the slop if it is hovering above it
-                            //We use slopAngleOld for performance optimization
-                            currentVelocity.y -= (hit.distance - SkinWidth) / Time.deltaTime;
-                        }
+						currentVelocity.y -= (hit.distance - SkinWidth) / Time.deltaTime;
+						//if (slopeAngle != slopeAngleOld)
+      //                  {
+      //                      //Make the player move towards the slop if it is hovering above it
+      //                      //We use slopAngleOld for performance optimization
+      //                      currentVelocity.y -= (hit.distance - SkinWidth) / Time.deltaTime;
+      //                  }
                     }
 				}
 			}
