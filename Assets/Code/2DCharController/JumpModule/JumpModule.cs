@@ -2,9 +2,9 @@
 
 public abstract class JumpModule: ScriptableObject
 {
-    protected Player2DController_Motor motor;
+    protected IPlayer2DControllerMotor motor;
 
-    public void Initialize(Player2DController_Motor motor)
+    public void Initialize(IPlayer2DControllerMotor motor)
     {
         this.motor = motor;
     }

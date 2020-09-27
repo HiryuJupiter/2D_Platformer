@@ -19,7 +19,7 @@ public class JumpModule_Burst : JumpModule
 
     public override void OnBtnUp()
     {
-        if (motor.GetVelocity.y > minJumpForce)
+        if (motor.GetVelocity().y > minJumpForce)
         {
             motor.SetVelocityY(minJumpForce);
         }
