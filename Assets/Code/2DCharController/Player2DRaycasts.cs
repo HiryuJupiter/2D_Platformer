@@ -32,8 +32,6 @@ public class Player2DRaycasts : MonoBehaviour
     #region Properties
     public bool IsOnGround => OnGroundCheck();
     public bool HitsCeiling => CheckAgainstCeiling();
-    public bool IsAgainstLeft => IsAgainstSide(true);
-    public bool IsAgainstRight => IsAgainstSide(false);
 
     //The final world positions (not offsets)
     public Vector2 BL { get; private set; }
@@ -73,12 +71,12 @@ public class Player2DRaycasts : MonoBehaviour
         TR_inner = (Vector2)transform.position + offset_TR_inner;
 
         //Debug
-        Debug.DrawRay(BL, Vector3.left, Color.blue);
-        Debug.DrawRay(BR, Vector3.right, Color.blue);
-        Debug.DrawRay(TL_outer, Vector3.left, Color.blue);
-        Debug.DrawRay(TR_outer, Vector3.right, Color.blue);
-        Debug.DrawRay(TL_inner, Vector3.left, Color.blue);
-        Debug.DrawRay(TR_inner, Vector3.right, Color.blue);
+        //Debug.DrawRay(BL, Vector3.left, Color.blue);
+        //Debug.DrawRay(BR, Vector3.right, Color.blue);
+        //Debug.DrawRay(TL_outer, Vector3.left, Color.blue);
+        //Debug.DrawRay(TR_outer, Vector3.right, Color.blue);
+        //Debug.DrawRay(TL_inner, Vector3.left, Color.blue);
+        //Debug.DrawRay(TR_inner, Vector3.right, Color.blue);
     }
 
 
@@ -143,6 +141,24 @@ public class Player2DRaycasts : MonoBehaviour
         }
         return 0f;
     }
+
+    public int GetWallDirSign()
+    {
+        RaycastHit2D right;
+        RaycastHit2D left;
+        if (right = Raycast(TR_outer, Vector2.right, checkDist, groundLayer, Color.blue))
+        {
+            Debug.DrawRay(right.point, Vector3.up, Color.magenta, 1f);
+            return 1;
+        }
+        else if (left = Raycast(TL_outer, Vector2.left, checkDist, groundLayer, Color.blue))
+        {
+            Debug.DrawRay(left.point, Vector3.up, Color.magenta, 1f);
+            return -1;
+        }
+        return 0;
+    }
+
     #endregion
 
     #region Collision checks
@@ -160,25 +176,9 @@ public class Player2DRaycasts : MonoBehaviour
         return left || right ? true : false;
     }
 
-    bool IsAgainstSide(bool facingRight)
-    {
-        RaycastHit2D bot;
-        RaycastHit2D top;
-
-        if (facingRight)
-        {
-            bot = Raycast(BR, Vector2.right, checkDist, Color.green);
-            top = Raycast(TR_outer, Vector2.right, checkDist, Color.blue);
-        }
-        else
-        {
-            bot = Raycast(BL, Vector2.left, checkDist, Color.green);
-            top = Raycast(TL_outer, Vector2.left, checkDist, Color.blue);
-        }
-
-        return (bot && top) ? true : false;
-    }
+   
     #endregion
+
 
     #region Util
     RaycastHit2D Raycast(Vector2 origin, Vector2 dir, float dist, Color color)
@@ -201,3 +201,11 @@ public class Player2DRaycasts : MonoBehaviour
 //top = Physics2D.Raycast(new Vector2(direction * extentX, extentY), Vector3.right * direction, CheckDistance);
 //Debug.DrawRay(new Vector2(direction * extentX, -extentY), Vector3.right * direction * CheckDistance, Color.green);
 //Debug.DrawRay(new Vector2(direction * extentX,  extentY), Vector3.right * direction * CheckDistance, Color.blue);
+
+//public bool IsAgainstWall(int facingSign)
+//{
+//    RaycastHit2D bot = Raycast(BR, Vector2.right * facingSign, checkDist, Color.green);
+//    RaycastHit2D top = Raycast(TR_outer, Vector2.right * facingSign, checkDist, Color.blue);
+
+//    return (bot && top) ? true : false;
+//}
