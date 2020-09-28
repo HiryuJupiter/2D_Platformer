@@ -8,7 +8,7 @@ way.
  */
 
 [RequireComponent(typeof(Collider2D))]
-public class Player2DRaycasts : MonoBehaviour
+public class Player2DRaycaster : MonoBehaviour
 {
     [SerializeField] LayerMask groundLayer;
 
@@ -179,7 +179,6 @@ public class Player2DRaycasts : MonoBehaviour
    
     #endregion
 
-
     #region Util
     RaycastHit2D Raycast(Vector2 origin, Vector2 dir, float dist, Color color)
     {
@@ -192,7 +191,6 @@ public class Player2DRaycasts : MonoBehaviour
         return Physics2D.Raycast(origin, dir, dist, mask);
     }
     #endregion
-
 }
 
 

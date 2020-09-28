@@ -9,9 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6bf28ab6eb48a80478269aa57a26a9f2, type: 3}
-  m_Name: Jump Linear
+  m_Script: {fileID: 11500000, guid: 86a58bb70d33d1541bbdd2e630c35d8e, type: 3}
+  m_Name: MotorState_MoveOnGround
   m_EditorClassIdentifier: 
-  jumpForce: 15
-  jumpMinDuration: 0
-  jumpMaxDuration: 0.15
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  moveSpeed: 10
+  steerSpeed: 1
+  stickyGround: 1
+  maxSlopeAngle: 70

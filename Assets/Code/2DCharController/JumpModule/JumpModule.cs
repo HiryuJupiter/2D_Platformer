@@ -1,19 +1,23 @@
 ﻿using UnityEngine;
 
-public abstract class JumpModule: ScriptableObject
+[CreateAssetMenu(fileName = "Jump Burst", menuName = "Jump Modules/Burst")]
+
+public class JumpModule : ScriptableObject
 {
-    protected IPlayer2DControllerMotor motor;
+    Player2DController_Motor motor;
+    MotorStatus status;
 
-    [SerializeField] Vector2 wallJumpClimbUp  = new Vector2(7.5f, 16f);
-    [SerializeField] Vector2 wallJumpNormal   = new Vector2(8.5f, 7f);
-    [SerializeField] Vector2 wallJumpAway     = new Vector2(18f, 17f);
+    [SerializeField] Vector2 wallJumpClimbUp = new Vector2(7.5f, 16f);
+    [SerializeField] Vector2 wallJumpNormal = new Vector2(8.5f, 7f);
+    [SerializeField] Vector2 wallJumpAway = new Vector2(18f, 17f);
 
-    public void Initialize(IPlayer2DControllerMotor motor)
+    public void Initialize(Player2DController_Motor motor)
     {
         this.motor = motor;
+        status = motor.status;
     }
 
-    public virtual void OnWallJump(int wallSign, int moveSign)
+    public void WallJump(int wallSign, int moveSign)
     {
         Vector2 v;
         if (wallSign == moveSign)
@@ -29,10 +33,24 @@ public abstract class JumpModule: ScriptableObject
             v = wallJumpAway;
         }
         v.x *= -wallSign;
-        motor.SetVelocity(v);
+        status.currentVelocity = v;
     }
 
-    public abstract void OnBtnDown();
-    public abstract void OnBtnHold();
-    public abstract void OnBtnUp();
+    [SerializeField] float minJumpForce = 12f;
+    [SerializeField] float maxJumpForce = 22f;
+
+
+    public void NormalJump_OnButtonDown()
+    {
+        status.currentVelocity.y = maxJumpForce;
+    }
+
+
+    public void NormalJump_OnButtonUp()
+    {
+        if (status.currentVelocity.y > minJumpForce)
+        {
+            status.currentVelocity.y = minJumpForce;
+        }
+    }
 }

@@ -14,10 +14,11 @@ due to the raycast distance. And you can also walk off a platform that cause you
 //which will make the slower than what it should be
  */
 
+/*
 [DefaultExecutionOrder(-1)]
-[RequireComponent(typeof(Player2DRaycasts))]
+[RequireComponent(typeof(Player2DRaycaster))]
 [RequireComponent(typeof(JumpModule))]
-public class Player2DController_Motor_Working : MonoBehaviour, IPlayer2DControllerMotor
+public class Player2DController_Motor : MonoBehaviour
 {
 	//[Header("References")]
 	//[SerializeField] Collider2D collider_standing;
@@ -42,7 +43,7 @@ public class Player2DController_Motor_Working : MonoBehaviour, IPlayer2DControll
 	[SerializeField] LayerMask groundLayer;
 
 	//Reference
-	Player2DRaycasts raycaster;
+	Player2DRaycaster raycaster;
 	Rigidbody2D rb;
 
 	//Stats
@@ -100,7 +101,7 @@ public class Player2DController_Motor_Working : MonoBehaviour, IPlayer2DControll
 		decendSlopeCheckDist = moveSpeed * Mathf.Tan(maxSlope * Mathf.Deg2Rad);
 
 		rb = GetComponent<Rigidbody2D>();
-		raycaster = GetComponent<Player2DRaycasts>();
+		raycaster = GetComponent<Player2DRaycaster>();
 		jumpModule.Initialize(this);
 	}
 
@@ -449,3 +450,4 @@ public class Player2DController_Motor_Working : MonoBehaviour, IPlayer2DControll
 		GUI.Label(new Rect(500, 60, 290, 20), "slopeAngle: " + slopeAngle);
 	}
 }
+*/
