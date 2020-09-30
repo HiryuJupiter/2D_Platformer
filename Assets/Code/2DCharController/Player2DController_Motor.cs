@@ -3,6 +3,7 @@ using System.Collections;
 using JetBrains.Annotations;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.Assertions.Must;
 
 /* === NOTES ===
  * Jumping and OnGround are two different situations that doesn't always overlap. After pressing jump, you're still onground for a few frames due to the raycast distance. You can also walk off a platform that cause you to become !onGround and !jumping.
@@ -88,18 +89,32 @@ public class Player2DController_Motor : MonoBehaviour
 
     void CacheSigns()
     {
-
+        //Move input sign
         if (GameInput.MoveX > 0.1f)
         {
-            Status.moveSign = 1;
+            Status.moveInputSign = 1;
         }
         else if (GameInput.MoveX < -0.1f)
         {
-            Status.moveSign = -1;
+            Status.moveInputSign = -1;
         }
         else
         {
-            Status.moveSign = 0;
+            Status.moveInputSign = 0;
+        }
+
+        //Velocity x sign
+        if (Status.currentVelocity.x > 0.1f)
+        {
+            Status.velocityXSign = 1;
+        }
+        else if (Status.currentVelocity.x < -0.1f)
+        {
+            Status.velocityXSign = -1;
+        }
+        else
+        {
+            Status.velocityXSign = 0;
         }
     }
     #endregion
@@ -112,7 +127,7 @@ public class Player2DController_Motor : MonoBehaviour
         GUI.Label(new Rect(20, 80, 290, 20), "OnGround: " + Status.isOnGround);
         GUI.Label(new Rect(20, 100, 290, 20), "onGroundPrevious: " + Status.isOnGroundPrevious);
         GUI.Label(new Rect(20, 120, 290, 20), "GameInput.MoveX: " + GameInput.MoveX);
-        GUI.Label(new Rect(20, 140, 290, 20), "movingSign: " + Status.moveSign);
+        GUI.Label(new Rect(20, 140, 290, 20), "movingSign: " + Status.moveInputSign);
         GUI.Label(new Rect(20, 160, 290, 20), "targetVelocity: " + Status.currentVelocity);
 
         GUI.Label(new Rect(200, 0, 290, 20), "=== JUMPING === ");

@@ -116,6 +116,51 @@ public class Player2DRaycaster : MonoBehaviour
         }
     }
 
+    public float DistanceToGroundAndAngle(float yVelocity, out float angle)
+    {
+        //Find the position this object would be when on the ground. 
+
+        RaycastHit2D left = Raycast(BL, Vector2.down, yVelocity, groundLayer, Color.cyan);
+        RaycastHit2D right = Raycast(BR, Vector2.down, yVelocity, groundLayer, Color.magenta);
+
+        float leftDist;
+        float rightDist;
+
+        if (left)
+            leftDist = left.distance;
+        if (right)
+            rightDist = right.distance;
+
+        if (!left && !right) //Neither hits
+        {
+            angle = 0f;
+            return 0f;
+        }
+        else if (left && !right) //Left hits
+        {
+            angle = GetSlopeAngle(left.normal);
+            return left.distance;
+        }
+        else if (!left && right) //Right hits
+        {
+            angle = GetSlopeAngle(right.normal);
+            return right.distance;
+        }
+        else //Both hits
+        {
+            if (left.distance < left.distance)
+            {
+                angle = GetSlopeAngle(right.normal);
+                return left.distance;
+            }
+            else
+            {
+                angle = GetSlopeAngle(right.normal);
+                return right.distance;
+            }
+        }
+    }
+
     public float CheckForCeilingSideNudge(float yVelocity)
     {
         //If 
@@ -182,6 +227,11 @@ public class Player2DRaycaster : MonoBehaviour
     {
         Debug.DrawRay(origin, dir * dist, color);
         return Physics2D.Raycast(origin, dir, dist, mask);
+    }
+
+    float GetSlopeAngle (Vector2 slopeNormal)
+    {
+        return Vector2.Angle(slopeNormal, Vector2.up);
     }
     #endregion
 }

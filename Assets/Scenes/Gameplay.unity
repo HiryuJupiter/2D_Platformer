@@ -459,9 +459,8 @@ MonoBehaviour:
   playerMoveSpeed: 10
   minJumpForce: 12
   maxJumpForce: 22
-  wallJumpClimbUp: {x: 20, y: 22}
-  wallJumpNormal: {x: 15, y: 7}
-  wallJumpAway: {x: 22, y: 22}
+  wallJumpForce: {x: 20, y: 22}
+  wallDetachForce: {x: 1, y: 7}
   wallStickMaxDuration: 0.25
   wallSlideSpeed: 3
   groundLayer:
@@ -1182,6 +1181,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 3408571411929858040, guid: 631c423030c472943af616d706d9115f,
+        type: 3}
+      propertyPath: m_Interpolate
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 631c423030c472943af616d706d9115f, type: 3}

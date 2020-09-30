@@ -9,7 +9,7 @@ public class Module_Gravity : ModuleBase
     {
         if (status.isOnGround)
         {
-            if (status.isFalling && !status.isMoving)
+            if (status.isFalling && status.moveInputSign == 0)
             {
                 status.currentVelocity.y = 0;
             }
@@ -29,6 +29,23 @@ public class Module_Gravity : ModuleBase
         if (status.isFalling && !status.isMoving)
         {
             //If the falling velocity is going below the ground, then reduce the velocity.
+            float angle;
+            float distance = raycaster.DistanceToGroundAndAngle(-status.currentVelocity.y * Time.deltaTime, out angle);
+            if (distance > 0)
+            {
+                //We want the character to have just enough fall speed to land perfectly on ground, however the rigidbody interpolation will cause the character to move a little extra on slop and cause it to slip, so we use a hack, angle * 0.08f, to reduce the fall speed so the slip effect is less apparent.
+                status.currentVelocity.y = -distance / Time.deltaTime + angle * 0.08f;
+            }
+        }
+    }
+}
+
+/*
+     void GravityOvershootPrevention()
+    {
+        if (status.isFalling && !status.isMoving)
+        {
+            //If the falling velocity is going below the ground, then reduce the velocity.
             float distance = raycaster.DistanceToGround(-status.currentVelocity.y * Time.deltaTime);
             if (distance > 0)
             {
@@ -38,9 +55,13 @@ public class Module_Gravity : ModuleBase
                 RaycastHit2D right = Physics2D.Raycast(raycaster.BR, Vector2.down, -status.currentVelocity.y * Time.deltaTime, settings.GroundLayer);
                 //Debug.DrawRay(right.point, Vector3.right, Color.magenta);
 
-                status.currentVelocity.y = -distance; //THis is absolutely perfct in Non-interpolate. Interpolation does make the character slide upon landing, but this is by far the best option.
-                                                      //Debug.DrawRay((Vector3)raycaster.BR - Vector3.down * currentVelocity.y * Time.deltaTime, Vector3.right, Color.cyan);
+                status.currentVelocity.y = -distance / Time.deltaTime;
+                //Debug.DrawRay((Vector3)raycaster.BR - Vector3.down * currentVelocity.y * Time.deltaTime, Vector3.right, Color.cyan);
+
+                //-distance / Time.deltaTime;  is good for flat surface but slides on slope
+                //-distance; is good for slopes 
+                //We use the flat surface version because 
             }
         }
     }
-}
+ */

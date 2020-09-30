@@ -4,6 +4,7 @@ using System.Collections.Generic;
 [CreateAssetMenu(fileName = "MotorState_MoveOnGround", menuName = "Motor States/Move On Ground")]
 public class MotorState_MoveOnGround : MotorStateBase
 {
+    Module_StickToSlope stickToSlope;
     public MotorState_MoveOnGround(Player2DController_Motor motor) : base(motor)
     {
         modules = new List<ModuleBase>()
@@ -16,8 +17,18 @@ public class MotorState_MoveOnGround : MotorStateBase
 
         if (settings.StickyGround)
         {
-            modules.Add(new Module_SlopeHandling(motor));
+            stickToSlope = new Module_StickToSlope(motor);
+            modules.Add(stickToSlope);
         }
+    }
+
+    public override void StateEntry()
+    {
+        base.StateEntry();
+
+        //Immediately stick to slope, don't wait until next frame.
+        if (settings.StickyGround)
+            stickToSlope.TickFixedUpdate();
     }
 
     protected override void Transitions()

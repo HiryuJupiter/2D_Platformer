@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Module_SlopeHandling : ModuleBase
+public class Module_StickToSlope : ModuleBase
 {
     const float SkinWidth = 0.005f;
 
     float decendSlopeMaxCheckDist;
 
 
-    public Module_SlopeHandling(Player2DController_Motor motor) : base(motor)
+    public Module_StickToSlope(Player2DController_Motor motor) : base(motor)
     {
         decendSlopeMaxCheckDist = settings.PlayerMoveSpeed * Mathf.Tan(settings.MaxSlopeAngle * Mathf.Deg2Rad);
     }
@@ -26,14 +26,14 @@ public class Module_SlopeHandling : ModuleBase
         if (status.isMoving)
         {
             //Ascending
-            Vector2 frontfoot = status.moveSign > 0 ? raycaster.BR : raycaster.BL;
+            Vector2 frontfoot = status.moveInputSign > 0 ? raycaster.BR : raycaster.BL;
             StickToAscendingSlope(frontfoot);
 
             //Only allow decending slope when not currently ascending.
             if (!status.climbingSlope)
             {
                 //Descending
-                Vector2 backfoot = status.moveSign > 0 ? raycaster.BL : raycaster.BR;
+                Vector2 backfoot = status.moveInputSign > 0 ? raycaster.BL : raycaster.BR;
                 StickToDecendingSlope(backfoot);
 
                 //This prevents "car-flys-over-ramp" effect after finish climbing slope.
@@ -59,7 +59,7 @@ public class Module_SlopeHandling : ModuleBase
 
     void StickToAscendingSlope(Vector2 origin)
     {
-        RaycastHit2D hit = Physics2D.Raycast(origin, Vector3.right * status.moveSign, Mathf.Abs(status.currentVelocity.x) * Time.deltaTime, settings.GroundLayer);
+        RaycastHit2D hit = Physics2D.Raycast(origin, Vector3.right * status.moveInputSign, Mathf.Abs(status.currentVelocity.x) * Time.deltaTime, settings.GroundLayer);
 
         //Debug.DrawRay(origin, new Vector3(currentVelocity.x * Time.deltaTime, 0f, 0f), Color.cyan);
 
@@ -77,12 +77,12 @@ public class Module_SlopeHandling : ModuleBase
                 if (slopeAngle != status.slopeAngleOld) //For optimization, only do once per slope
                 {
                     gapDist = hit.distance - SkinWidth;
-                    newVelocity.x = gapDist / Time.deltaTime * status.moveSign;
+                    newVelocity.x = gapDist / Time.deltaTime * status.moveInputSign;
                 }
                 //Take the full VelocityX, minus the gap distance, then use the remaining velocity X...
                 //...to calculate slope climbing. 
                 float climbDistance = settings.PlayerMoveSpeed - gapDist; //climbDistance is also the hypotenues
-                float displaceX = Mathf.Cos(slopeAngle * Mathf.Deg2Rad) * climbDistance * status.moveSign;
+                float displaceX = Mathf.Cos(slopeAngle * Mathf.Deg2Rad) * climbDistance * status.moveInputSign;
                 float displaceY = Mathf.Sin(slopeAngle * Mathf.Deg2Rad) * climbDistance;
                 newVelocity.x += displaceX;
                 newVelocity.y = displaceY;
@@ -105,7 +105,7 @@ public class Module_SlopeHandling : ModuleBase
             if (status.slopeAngle != 0 && status.slopeAngle < settings.MaxSlopeAngle)
             {
                 //See if we're decending the slope, by checking if we are facing the same x-direction as the slope normal
-                if (Mathf.Sign(hit.normal.x) == status.moveSign)
+                if (Mathf.Sign(hit.normal.x) == status.moveInputSign)
                 {
                     status.descendingSlope = true;
                     //Check if we are standing close enough to the platform to begin decend calculation. 
@@ -114,7 +114,7 @@ public class Module_SlopeHandling : ModuleBase
                     {
                         //Specify the decend amount
                         //Btw we're using max move speed (moveSpeed) instead of currentVelocity.x because it is reduced by smoothdamp.
-                        status.currentVelocity.x = Mathf.Cos(status.slopeAngle * Mathf.Deg2Rad) * settings.PlayerMoveSpeed * status.moveSign;
+                        status.currentVelocity.x = Mathf.Cos(status.slopeAngle * Mathf.Deg2Rad) * settings.PlayerMoveSpeed * status.moveInputSign;
                         status.currentVelocity.y = -Mathf.Sin(status.slopeAngle * Mathf.Deg2Rad) * settings.PlayerMoveSpeed;
                         //currentVelocity.y -= (hit.distance - SkinWidth) / Time.deltaTime;
                         if (status.slopeAngle != status.slopeAngleOld)

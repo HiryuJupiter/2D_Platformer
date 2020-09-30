@@ -4,13 +4,15 @@ using System.Collections.Generic;
 [CreateAssetMenu(fileName = "MotorState_WallClimb", menuName = "Motor States/Wall Climb")]
 public class MotorState_WallClimb : MotorStateBase
 {
+    Module_WallClimb wallClimb;
     public MotorState_WallClimb(Player2DController_Motor motor) : base(motor)
     {
+        wallClimb = new Module_WallClimb(motor);
         modules = new List<ModuleBase>()
         {
-             new Module_Gravity(motor),
-             new Module_CeilingHitCheck(motor),
-            new Module_WallClimb(motor),
+            new Module_Gravity(motor),
+            new Module_CeilingHitCheck(motor),
+            wallClimb
         };
     }
 
@@ -20,6 +22,9 @@ public class MotorState_WallClimb : MotorStateBase
         status.isWallSliding = true;
         status.isJumping = false;
         status.jumpQueueTimer = -1f;
+
+        //Immediately climb wall, instead of waiting for next frame.
+        wallClimb.TickFixedUpdate();
     }
 
     public override void StateExit()

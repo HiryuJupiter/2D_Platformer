@@ -19,10 +19,10 @@ public class MotorState_Aerial : MotorStateBase
             new Module_StandardJump(motor),
         };
 
-        if (settings.StickyGround)
-        {
-            modules.Add(new Module_SlopeHandling(motor));
-        }
+        //if (settings.StickyGround)
+        //{
+        //    modules.Add(new Module_StickToSlope(motor));
+        //}
     }
 
     protected override void Transitions()
@@ -33,8 +33,11 @@ public class MotorState_Aerial : MotorStateBase
         {
             motor.SwitchToNewState(MotorStates.OnGround);
         }
+        //If hits a wall in air, and either you're pressing towards the wall or
+        //your momentum is going towards the wall, go to wallclimb.
         else if (!status.isOnGround && !status.isMovingUp 
-            && status.wallSign != 0 && status.wallSign + status.moveSign != 0)
+            && status.wallSign != 0 && 
+            (status.wallSign == status.moveInputSign) || (status.wallSign == status.velocityXSign))
         {
             motor.SwitchToNewState(MotorStates.WallClimb);
         }

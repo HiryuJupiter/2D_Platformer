@@ -22,15 +22,12 @@ public class GameSettings : MonoBehaviour
     public float MaxJumpForce => maxJumpForce;
 
     [Header("Wall Jump")]
-    [SerializeField] Vector2 wallJumpUpForce = new Vector2(20f, 22f); //7.5, 16
-    [SerializeField] Vector2 wallJumpNormal = new Vector2(15f, 7f); //8.5, 7
-    [SerializeField] Vector2 wallJumpAwayForce = new Vector2(22f, 22f); //18, 17
-    [SerializeField] Vector2 wallDetachForce = new Vector2(8.5f, 7f); //18, 17
+    [SerializeField] Vector2 wallJumpForce = new Vector2(20f, 22f); //7.5, 16
+    [SerializeField] Vector2 wallDetachForce = new Vector2(15f, 7f); //8.5, 7
+    
     [SerializeField] float wallStickMaxDuration = .25f;
     [SerializeField] float wallSlideSpeed = 3;
-    public Vector2 WallJumpClimbUp => wallJumpUpForce;
-    public Vector2 WallJumpNormal => wallJumpNormal;
-    public Vector2 WallJumpAway => wallJumpAwayForce;
+    public Vector2 WallJumpForce => wallJumpForce;
     public Vector2 WallDetachForce => wallDetachForce;
     public float WallStickMaxDuration => wallStickMaxDuration;
     public float WallSlideSpeed => wallSlideSpeed;
@@ -48,9 +45,10 @@ public class GameSettings : MonoBehaviour
     [Header("Physics  behavior")]
     [SerializeField] bool stickyGround = true;
     [SerializeField] int maxSlopeAngle = 70;
-
+    //[Range(0.05f, 0.2f)] [SerializeField] float angleBasedFallSpeedModifier = 0.02f;
     public bool StickyGround => stickyGround;
     public int MaxSlopeAngle => maxSlopeAngle;
+    //public float AngleBasedFallSpeedModifier => angleBasedFallSpeedModifier;
 
     void Awake()
     {

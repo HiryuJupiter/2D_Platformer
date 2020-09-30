@@ -17,7 +17,7 @@ public class Module_WallClimb : ModuleBase
         base.TickUpdate();
         if (GameInput.JumpBtnDown)
         {
-            WallJump(status.wallSign, status.moveSign);
+            WallJump(settings.WallJumpForce);
         }
     }
 
@@ -49,9 +49,13 @@ public class Module_WallClimb : ModuleBase
             status.currentVelocity.x = 0;
 
             //If not pressing away from the wall, tick the timer toward unsticking.
-            if (status.moveSign != 0 && status.moveSign != status.wallSign)
+            if (status.moveInputSign != 0 && status.moveInputSign != status.wallSign)
             {
                 status.wallStickTimer -= Time.deltaTime;
+                if (status.wallStickTimer < 0)
+                {
+                    WallJump(settings.WallDetachForce);
+                }
             }
             else
             {
@@ -60,21 +64,8 @@ public class Module_WallClimb : ModuleBase
         }
     }
 
-    void WallJump(int wallSign, int moveSign)
+    void WallJump(Vector2 v)
     {
-        Vector2 v;
-        if (wallSign == moveSign)
-        {
-            v = settings.WallJumpClimbUp;
-        }
-        else if (moveSign == 0)
-        {
-            v = settings.WallJumpNormal;
-        }
-        else
-        {
-            v = settings.WallJumpAway;
-        }
         v.x *= -status.wallSign;
         status.isJumping = true;
 

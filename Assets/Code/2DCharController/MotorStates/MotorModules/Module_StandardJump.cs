@@ -49,7 +49,6 @@ public class Module_StandardJump : ModuleBase
         {
             status.isJumping = false;
             status.coyoteTimer = -1f;
-            Debug.Log("just landed");
         }
     }
     #endregion
