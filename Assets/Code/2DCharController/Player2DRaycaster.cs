@@ -23,15 +23,12 @@ public class Player2DRaycaster : MonoBehaviour
     Vector2 offset_TL_inner;
     Vector2 offset_TR_inner;
 
-    float extentY;
-
     //Const
     const float checkDist = 0.06f;
     const float sideNudgeDist = 0.2f;
 
     #region Properties
     public bool IsOnGround => OnGroundCheck();
-    public bool HitsCeiling => CheckAgainstCeiling();
 
     //The final world positions (not offsets)
     public Vector2 BL { get; private set; }
@@ -56,7 +53,6 @@ public class Player2DRaycaster : MonoBehaviour
         offset_TL_inner = new Vector2(-x + sideNudgeDist, y);
         offset_TR_inner = new Vector2(x - sideNudgeDist, y);
 
-        extentY = bounds.extents.y;
     }
     #endregion
 
@@ -159,6 +155,12 @@ public class Player2DRaycaster : MonoBehaviour
         return 0;
     }
 
+    public bool HitsCeiling()
+    {
+        RaycastHit2D left = Raycast(TL_outer, Vector2.up, checkDist, groundLayer, Color.yellow);
+        RaycastHit2D right = Raycast(TR_outer, Vector2.up, checkDist, groundLayer, Color.red);
+        return left || right ? true : false;
+    }
     #endregion
 
     #region Collision checks
@@ -168,15 +170,6 @@ public class Player2DRaycaster : MonoBehaviour
         RaycastHit2D right = Raycast(BR, Vector2.down, checkDist, groundLayer, Color.red);
         return left || right ? true : false;
     }
-
-    bool CheckAgainstCeiling()
-    {
-        RaycastHit2D left = Raycast(TL_outer, Vector2.up, checkDist, groundLayer, Color.yellow);
-        RaycastHit2D right = Raycast(TR_outer, Vector2.up, checkDist, groundLayer, Color.red);
-        return left || right ? true : false;
-    }
-
-   
     #endregion
 
     #region Util

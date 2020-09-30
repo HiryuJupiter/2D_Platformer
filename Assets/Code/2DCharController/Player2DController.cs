@@ -3,8 +3,6 @@ using UnityEngine;
 using UnityEngine.Events;
 
 
-
-
 [DefaultExecutionOrder(-2)]
 [RequireComponent(typeof(Player2DController_Graphics))]
 [RequireComponent(typeof(Player2DController_Motor))]

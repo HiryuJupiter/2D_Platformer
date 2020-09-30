@@ -408,6 +408,7 @@ GameObject:
   - component: {fileID: 144311939}
   - component: {fileID: 144311942}
   - component: {fileID: 144311940}
+  - component: {fileID: 144311941}
   m_Layer: 0
   m_Name: '#SceneManager'
   m_TagString: Untagged
@@ -441,6 +442,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a53bfec7d087c124a9ba17f3b2c108c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &144311941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 144311938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe6b1e25afa326c4d845bdc0dab12e01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  steerSpeedGround: 1
+  steerSpeedAir: 1
+  playerMoveSpeed: 10
+  minJumpForce: 12
+  maxJumpForce: 22
+  wallJumpClimbUp: {x: 7.5, y: 16}
+  wallJumpNormal: {x: 8.5, y: 7}
+  wallJumpAway: {x: 18, y: 17}
+  wallStickMaxDuration: 0.25
+  wallSlideSpeed: 3
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  maxFallSpeed: -15
+  gravity: 80
+  stickyGround: 1
+  maxSlopeAngle: 70
 --- !u!114 &144311942
 MonoBehaviour:
   m_ObjectHideFlags: 0
