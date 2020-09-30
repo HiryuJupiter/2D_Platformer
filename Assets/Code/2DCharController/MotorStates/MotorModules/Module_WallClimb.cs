@@ -12,6 +12,15 @@ public class Module_WallClimb : ModuleBase
         status.wallStickTimer = settings.WallStickMaxDuration;
     }
 
+    public override void TickUpdate()
+    {
+        base.TickUpdate();
+        if (GameInput.JumpBtnDown)
+        {
+            WallJump(status.wallSign, status.moveSign);
+        }
+    }
+
     public override void TickFixedUpdate()
     {
         status.wallSign = raycaster.GetWallDirSign();
@@ -50,4 +59,92 @@ public class Module_WallClimb : ModuleBase
             }
         }
     }
+
+    void WallJump(int wallSign, int moveSign)
+    {
+        Vector2 v;
+        if (wallSign == moveSign)
+        {
+            v = settings.WallJumpClimbUp;
+        }
+        else if (moveSign == 0)
+        {
+            v = settings.WallJumpNormal;
+        }
+        else
+        {
+            v = settings.WallJumpAway;
+        }
+        v.x *= -status.wallSign;
+        status.isJumping = true;
+
+        status.wallStickTimer = -1f;
+        status.currentVelocity = v;
+
+        status.jumpQueueTimer = -1f;
+        status.coyoteTimer = -1f;
+        motor.SwitchToNewState(MotorStates.Aerial);
+    }
 }
+
+/*
+    void WallSlide()
+    {
+        //Limit sliding speed
+        if (status.currentVelocity.y < -settings.WallSlideSpeed)
+            status.currentVelocity.y = -settings.WallSlideSpeed;
+
+        //Unstuck delay
+        if (status.wallStickTimer > 0)
+        {
+            //Fixed x movement while you have wallStick timer.
+            status.currentVelocity.x = 0;
+
+            //If not pressing away from the wall, tick the timer toward unsticking.
+            if (status.moveSign != 0 && status.moveSign != status.wallSign)
+            {
+                status.wallStickTimer -= Time.deltaTime;
+                if  (status.wallStickTimer < 0)
+                {
+                    DetachFromWall();
+                }
+            }
+            else
+            {
+                status.wallStickTimer = settings.WallStickMaxDuration;
+            }
+        }
+    }
+
+    void WallJump()
+    {
+        Vector2 v;
+        if (status.wallSign == status.moveSign)
+        {
+            v = settings.WallJumpUpForce;
+        }
+        else
+        {
+            v = settings.WallJumpAwayForce;
+        }
+        SetJumpVelocity(v);
+    }
+
+    void DetachFromWall ()
+    {
+        SetJumpVelocity(settings.WallDetachForce);
+    }
+
+    void SetJumpVelocity (Vector3 v)
+    {
+        v.x *= -status.wallSign;
+        status.isJumping = true;
+
+        status.wallStickTimer = -1f;
+        status.currentVelocity = v;
+
+        status.jumpQueueTimer = -1f;
+        status.coyoteTimer = -1f;
+        motor.SwitchToNewState(MotorStates.Aerial);
+    }
+ */

@@ -10,13 +10,7 @@ public class MotorState_WallClimb : MotorStateBase
         {
              new Module_Gravity(motor),
              new Module_CeilingHitCheck(motor),
-
-             //new Module_MoveOnGround(motor),
-            //new Module_StandardJump(motor),
-
-
             new Module_WallClimb(motor),
-            new Module_WallJump(motor),
         };
     }
 
@@ -25,6 +19,7 @@ public class MotorState_WallClimb : MotorStateBase
         base.StateEntry();
         status.isWallSliding = true;
         status.isJumping = false;
+        status.jumpQueueTimer = -1f;
     }
 
     public override void StateExit()

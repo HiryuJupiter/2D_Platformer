@@ -34,7 +34,7 @@ public class MotorState_Aerial : MotorStateBase
             motor.SwitchToNewState(MotorStates.OnGround);
         }
         else if (!status.isOnGround && !status.isMovingUp 
-            && status.wallSign != 0)
+            && status.wallSign != 0 && status.wallSign + status.moveSign != 0)
         {
             motor.SwitchToNewState(MotorStates.WallClimb);
         }
