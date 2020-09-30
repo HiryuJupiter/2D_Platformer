@@ -20,7 +20,6 @@ public class Module_SlopeHandling : ModuleBase
             return;
         }
 
-
         status.climbingSlope = false;
         status.descendingSlope = false;
 

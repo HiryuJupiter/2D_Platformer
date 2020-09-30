@@ -4,7 +4,6 @@ using System.Collections.Generic;
 [CreateAssetMenu(fileName = "MotorState_MoveOnGround", menuName = "Motor States/Move On Ground")]
 public class MotorState_MoveOnGround : MotorStateBase
 {
-
     public MotorState_MoveOnGround(Player2DController_Motor motor) : base(motor)
     {
         modules = new List<ModuleBase>()
@@ -21,16 +20,11 @@ public class MotorState_MoveOnGround : MotorStateBase
         }
     }
 
-    #region Public 
-    public override void TickFixedUpdate()
+    protected override void Transitions()
     {
-        base.TickFixedUpdate();
-
-        //Transitions
         if (!status.isOnGround)
         {
-            //motor.SwitchToNewState(MotorStates.Aerial);
+            motor.SwitchToNewState(MotorStates.Aerial);
         }
     }
-    #endregion
 }

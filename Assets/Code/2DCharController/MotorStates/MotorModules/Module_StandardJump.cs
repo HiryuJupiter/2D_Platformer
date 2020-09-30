@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UIElements;
 
 [CreateAssetMenu(fileName = "Jump Burst", menuName = "Jump Modules/Burst")]
 
@@ -9,18 +10,23 @@ public class Module_StandardJump : ModuleBase
     public Module_StandardJump(Player2DController_Motor motor) : base(motor) { }
 
     #region Public 
-    
 
-    public override void TickUpdate()
+    public override void ModuleEntry()
     {
-        TickTimers();
-
+        base.ModuleEntry();
         if (status.jumpQueueTimer > 0f)
         {
             OnJumpBtnDown();
         }
+    }
 
-        if (GameInput.JumpBtnDown && status.coyoteTimer > 0f) // && !isJumping for onGround
+    public override void TickUpdate()
+    {
+
+
+        TickTimers();
+
+        if (GameInput.JumpBtnDown && status.canJump) // && !isJumping for onGround
         {
             OnJumpBtnDown();
         }
@@ -33,6 +39,17 @@ public class Module_StandardJump : ModuleBase
         if (GameInput.JumpBtnUp)
         {
             OnJumpBtnUp();
+        }
+    }
+
+    public override void TickFixedUpdate()
+    {
+        base.TickFixedUpdate();
+        if (status.justLanded)
+        {
+            status.isJumping = false;
+            status.coyoteTimer = -1f;
+            Debug.Log("just landed");
         }
     }
     #endregion

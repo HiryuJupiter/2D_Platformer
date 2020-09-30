@@ -11,18 +11,20 @@ public class Module_MoveInAir : ModuleBase
 
     public override void ModuleEntry()
     {
-        RenewCoyoteTimer();
+        CheckIfJustWalkeOffPlatform();
     }
 
     public override void TickFixedUpdate()
     {
-        status.currentVelocity.x = Mathf.SmoothDamp(status.currentVelocity.x, GameInput.MoveX * settings.PlayerMoveSpeed, ref moveXSmoothDampVelocity, settings.SteerSpeedGround * Time.deltaTime);
+        //Move
+        status.currentVelocity.x = Mathf.SmoothDamp(status.currentVelocity.x, GameInput.MoveX * settings.PlayerMoveSpeed, ref moveXSmoothDampVelocity, settings.SteerSpeedAir * Time.deltaTime);
     }
 
-    void RenewCoyoteTimer()
+    void CheckIfJustWalkeOffPlatform()
     {
         if (!status.isOnGround && status.isOnGroundPrevious && !status.isJumping)
         {
+            Debug.Log("Just walked off platform");
             status.coyoteTimer = MaxCoyoteDuration;
         }
     }

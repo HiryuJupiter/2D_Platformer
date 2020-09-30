@@ -8,7 +8,7 @@ public class GameSettings : MonoBehaviour
     
     [Header("Player Movement")]
     [Range(0.1f, 4f)] [SerializeField] float steerSpeedGround = 1f; //50f
-    [Range(0.1f, 4f)] [SerializeField] float steerSpeedAir = 1f; //50f
+    [Range(0.1f, 6f)] [SerializeField] float steerSpeedAir = 4f; //50f
     [SerializeField] float playerMoveSpeed = 10;
 
     public float SteerSpeedGround => steerSpeedGround;

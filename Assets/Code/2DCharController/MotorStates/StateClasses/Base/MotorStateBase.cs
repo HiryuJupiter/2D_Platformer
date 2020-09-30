@@ -42,6 +42,7 @@ public abstract class MotorStateBase
         {
             m.TickFixedUpdate();
         }
+        Transitions();
     }
 
     public virtual void StateExit()
@@ -51,4 +52,6 @@ public abstract class MotorStateBase
             m.ModuleExit();
         }
     }
+
+    protected abstract void Transitions();
 }

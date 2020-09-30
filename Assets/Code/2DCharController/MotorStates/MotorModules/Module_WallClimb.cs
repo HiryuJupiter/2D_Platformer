@@ -1,29 +1,30 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEditorInternal;
 
 public class Module_WallClimb : ModuleBase
 {
     public Module_WallClimb(Player2DController_Motor motor) : base(motor) { }
 
+    public override void ModuleEntry()
+    {
+        base.ModuleEntry();
+        status.wallStickTimer = settings.WallStickMaxDuration;
+    }
+
     public override void TickFixedUpdate()
     {
         status.wallSign = raycaster.GetWallDirSign();
-        if (status.isOnGround)
-        {
-            motor.SwitchToNewState(MotorStates.OnGround);
-        }
-        else if (status.isMovingUp || status.wallSign == 0)
-        {
-            motor.SwitchToNewState(MotorStates.Aerial);
-        }
-        else if (status.wallSign != 0)
+        if (status.wallSign != 0)
         {
             WallSlide();
-            if (GameInput.JumpBtnDown)
-            {
-                WallJump(status.wallSign, status.moveSign);
-            }
         }
+    }
+
+    public override void ModuleExit()
+    {
+        base.ModuleExit();
+        status.wallStickTimer = -1;
     }
 
     void WallSlide()
@@ -48,25 +49,5 @@ public class Module_WallClimb : ModuleBase
                 status.wallStickTimer = settings.WallStickMaxDuration;
             }
         }
-    }
-
-    void WallJump(int wallSign, int moveSign)
-    {
-        Vector2 v;
-        if (wallSign == moveSign)
-        {
-            v = settings.WallJumpClimbUp;
-        }
-        else if (moveSign == 0)
-        {
-            v = settings.WallJumpNormal;
-        }
-        else
-        {
-            v = settings.WallJumpAway;
-        }
-        v.x *= -wallSign;
-        status.currentVelocity = v;
-        motor.SwitchToNewState(MotorStates.Aerial);
     }
 }

@@ -23,13 +23,13 @@ public class Player2DController_Motor : MonoBehaviour
 
     public Player2DRaycaster Raycaster { get; private set; }
     public MotorStatus Status { get; private set; }
-    public Rigidbody2D rb { get; private set; }
+    public Rigidbody2D Rb { get; private set; }
 
     #region MonoBehiavor
     void Awake()
     {
         //Reference
-        rb = GetComponent<Rigidbody2D>();
+        Rb = GetComponent<Rigidbody2D>();
         Raycaster = GetComponent<Player2DRaycaster>();
 
         //Initialize
@@ -60,7 +60,7 @@ public class Player2DController_Motor : MonoBehaviour
 
         currentStateClass?.TickFixedUpdate();
 
-        rb.velocity = Status.currentVelocity;
+        Rb.velocity = Status.currentVelocity;
         Status.CacheCurrentValuesToOld();
     }
     #endregion
@@ -82,19 +82,13 @@ public class Player2DController_Motor : MonoBehaviour
     #region Pre-check
     void CacheStatus()
     {
-        UpdateFacingSign();
-
+        CacheSigns();
         Status.isOnGround = Raycaster.IsOnGround;
-
-        
     }
 
-
-    #endregion
-
-    #region Util
-    void UpdateFacingSign()
+    void CacheSigns()
     {
+
         if (GameInput.MoveX > 0.1f)
         {
             Status.moveSign = 1;
@@ -138,41 +132,5 @@ public class Player2DController_Motor : MonoBehaviour
         GUI.Label(new Rect(600, 20, 290, 20), "wallSign: " + Status.wallSign);
         GUI.Label(new Rect(600, 40, 290, 20), "wallStickTimer: " + Status.wallStickTimer);
         GUI.Label(new Rect(600, 60, 290, 20), "isWallSliding: " + Status.isWallSliding);
-    }
-}
-
-public class MotorStatus
-{
-    //Move
-    public bool isOnGround;
-    public bool isOnGroundPrevious;
-    public bool isJumping;
-    public int moveSign;
-    public Vector3 currentVelocity;
-
-    //Jump
-    public float coyoteTimer;
-    public float jumpQueueTimer;
-        
-    //Slope handing
-    public bool descendingSlope;
-    public bool climbingSlope;
-    public float slopeAngle;
-    public float slopeAngleOld;
-
-    //Wall climb 
-    public int wallSign;
-    public float wallStickTimer;
-    public bool isWallSliding;
-
-    //Properties
-    public bool isFalling => currentVelocity.y < 0f;
-    public bool isMovingUp => currentVelocity.y > 0f;
-    public bool isMoving => moveSign != 0;
-
-    public void CacheCurrentValuesToOld ()
-    {
-        isOnGroundPrevious = isOnGround;
-        slopeAngleOld = slopeAngle;
     }
 }

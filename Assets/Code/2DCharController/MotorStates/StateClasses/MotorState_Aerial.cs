@@ -9,9 +9,6 @@ using System.Collections.Generic;
 [CreateAssetMenu(fileName = "MotorState_Aerial", menuName = "Motor States/Aerial")]
 public class MotorState_Aerial : MotorStateBase
 {
-    const float MaxCoyoteDuration = 0.2f;
-
-
     public MotorState_Aerial(Player2DController_Motor motor) : base(motor)
     {
         modules = new List<ModuleBase>()
@@ -19,7 +16,7 @@ public class MotorState_Aerial : MotorStateBase
             new Module_Gravity(motor),
             new Module_StandardJump(motor),
             new Module_CeilingHitCheck(motor),
-            new Module_MoveOnGround(motor),
+            new Module_MoveInAir(motor), //Change this
         };
 
         if (settings.StickyGround)
@@ -28,22 +25,18 @@ public class MotorState_Aerial : MotorStateBase
         }
     }
 
-    #region Public 
-    public override void TickFixedUpdate()
+    protected override void Transitions()
     {
-        base.TickFixedUpdate();
+        status.wallSign = raycaster.GetWallDirSign();
+
         if (status.isOnGround && !status.isJumping)
         {
             motor.SwitchToNewState(MotorStates.OnGround);
         }
+        else if (!status.isOnGround && !status.isMovingUp 
+            && status.wallSign != 0)
+        {
+            motor.SwitchToNewState(MotorStates.WallClimb);
+        }
     }
-
-    public override void StateExit()
-    {
-        base.StateExit();
-        status.isJumping = false;
-        status.jumpQueueTimer = -1f;
-        status.coyoteTimer = -1f;
-    }
-    #endregion
 }
