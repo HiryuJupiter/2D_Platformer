@@ -33,7 +33,13 @@ public class Module_WallJump : ModuleBase
             v = settings.WallJumpAway;
         }
         v.x *= -wallSign;
+        status.isJumping = true;
+
+        status.wallStickTimer = -1f;
         status.currentVelocity = v;
+
+        status.jumpQueueTimer = -1f;
+        status.coyoteTimer = -1f;
         motor.SwitchToNewState(MotorStates.Aerial);
     }
 }

@@ -7,7 +7,7 @@ public class Module_CeilingHitCheck : ModuleBase
     Rigidbody2D rb;
     public Module_CeilingHitCheck(Player2DController_Motor motor) : base(motor)
     {
-        rb = motor.Rb;
+        rb = motor.rb;
     }
     public override void TickFixedUpdate()
     {

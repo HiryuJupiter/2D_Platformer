@@ -9,9 +9,9 @@ public class MotorState_MoveOnGround : MotorStateBase
         modules = new List<ModuleBase>()
         {
             new Module_Gravity(motor),
-            new Module_StandardJump(motor),
             new Module_CeilingHitCheck(motor),
             new Module_MoveOnGround(motor),
+            new Module_StandardJump(motor),
         };
 
         if (settings.StickyGround)

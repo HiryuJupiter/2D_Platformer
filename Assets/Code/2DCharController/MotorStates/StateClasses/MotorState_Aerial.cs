@@ -14,9 +14,9 @@ public class MotorState_Aerial : MotorStateBase
         modules = new List<ModuleBase>()
         {
             new Module_Gravity(motor),
-            new Module_StandardJump(motor),
             new Module_CeilingHitCheck(motor),
-            new Module_MoveInAir(motor), //Change this
+            new Module_MoveInAir(motor), 
+            new Module_StandardJump(motor),
         };
 
         if (settings.StickyGround)

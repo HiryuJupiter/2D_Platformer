@@ -8,10 +8,15 @@ public class MotorState_WallClimb : MotorStateBase
     {
         modules = new List<ModuleBase>()
         {
+             new Module_Gravity(motor),
+             new Module_CeilingHitCheck(motor),
+
+             //new Module_MoveOnGround(motor),
+            //new Module_StandardJump(motor),
+
+
             new Module_WallClimb(motor),
             new Module_WallJump(motor),
-            new Module_Gravity(motor),
-            new Module_CeilingHitCheck(motor)
         };
     }
 
@@ -19,6 +24,7 @@ public class MotorState_WallClimb : MotorStateBase
     {
         base.StateEntry();
         status.isWallSliding = true;
+        status.isJumping = false;
     }
 
     public override void StateExit()
@@ -34,11 +40,9 @@ public class MotorState_WallClimb : MotorStateBase
             status.isJumping = false;
             motor.SwitchToNewState(MotorStates.OnGround);
         }
-        else if (status.wallSign == 0 || status.wallStickTimer <= 0f)
+        else if (status.wallSign == 0 || status.wallStickTimer <= 0f || status.isMovingUp)
         {
             motor.SwitchToNewState(MotorStates.Aerial);
         }
     }
-
-
 }

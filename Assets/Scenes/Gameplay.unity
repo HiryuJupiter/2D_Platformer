@@ -455,13 +455,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   steerSpeedGround: 1
-  steerSpeedAir: 4
+  steerSpeedAir: 5
   playerMoveSpeed: 10
   minJumpForce: 12
   maxJumpForce: 22
-  wallJumpClimbUp: {x: 7.5, y: 16}
-  wallJumpNormal: {x: 8.5, y: 7}
-  wallJumpAway: {x: 18, y: 17}
+  wallJumpClimbUp: {x: 20, y: 22}
+  wallJumpNormal: {x: 15, y: 7}
+  wallJumpAway: {x: 22, y: 22}
   wallStickMaxDuration: 0.25
   wallSlideSpeed: 3
   groundLayer:

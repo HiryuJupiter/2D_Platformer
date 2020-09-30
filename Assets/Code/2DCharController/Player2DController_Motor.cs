@@ -23,13 +23,13 @@ public class Player2DController_Motor : MonoBehaviour
 
     public Player2DRaycaster Raycaster { get; private set; }
     public MotorStatus Status { get; private set; }
-    public Rigidbody2D Rb { get; private set; }
+    public Rigidbody2D rb { get; private set; }
 
     #region MonoBehiavor
     void Awake()
     {
         //Reference
-        Rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
         Raycaster = GetComponent<Player2DRaycaster>();
 
         //Initialize
@@ -60,7 +60,7 @@ public class Player2DController_Motor : MonoBehaviour
 
         currentStateClass?.TickFixedUpdate();
 
-        Rb.velocity = Status.currentVelocity;
+        rb.velocity = Status.currentVelocity;
         Status.CacheCurrentValuesToOld();
     }
     #endregion
