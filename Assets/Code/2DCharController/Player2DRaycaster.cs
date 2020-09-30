@@ -116,7 +116,20 @@ public class Player2DRaycaster : MonoBehaviour
         }
     }
 
-    public float DistanceToGroundAndAngle(float yVelocity, out float angle)
+    public float DistanceAndAngleToGround_Moving(Vector2 dir, float dist, out float angle)
+    {
+        Vector2 origin = dir.x > 0 ? BR : BL;
+        RaycastHit2D hit = Raycast(origin, dir, dist, groundLayer, Color.cyan);
+        angle = GetSlopeAngle(hit.normal);
+        if (hit)
+        {
+            Debug.DrawRay(origin, dir, Color.red, 4f);
+            Debug.DrawRay(hit.point, hit.normal, Color.yellow, 4f);
+        }
+        return hit.distance;
+    }
+
+    public float DistanceAndAngleToGround_NonMoving(float yVelocity, out float angle)
     {
         //Find the position this object would be when on the ground. 
 
@@ -148,9 +161,9 @@ public class Player2DRaycaster : MonoBehaviour
         }
         else //Both hits
         {
-            if (left.distance < left.distance)
+            if (left.distance < right.distance)
             {
-                angle = GetSlopeAngle(right.normal);
+                angle = GetSlopeAngle(left.normal);
                 return left.distance;
             }
             else
