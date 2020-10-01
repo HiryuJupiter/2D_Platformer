@@ -200,16 +200,14 @@ public class Player2DRaycaster : MonoBehaviour
 
     public int GetWallDirSign()
     {
-        RaycastHit2D right;
-        RaycastHit2D left;
-        if (right = Raycast(TR_outer, Vector2.right, checkDist, groundLayer, Color.blue))
+        if (Raycast(TR_outer, Vector2.right, checkDist, groundLayer, Color.blue) || 
+            Raycast(BR, Vector2.right, checkDist, groundLayer, Color.blue))
         {
-            Debug.DrawRay(right.point, Vector3.up, Color.magenta, 1f);
             return 1;
         }
-        else if (left = Raycast(TL_outer, Vector2.left, checkDist, groundLayer, Color.blue))
+        else if (Raycast(TL_outer, Vector2.left, checkDist, groundLayer, Color.blue) ||
+            Raycast(BL, Vector2.left, checkDist, groundLayer, Color.blue))
         {
-            Debug.DrawRay(left.point, Vector3.up, Color.magenta, 1f);
             return -1;
         }
         return 0;
