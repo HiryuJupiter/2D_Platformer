@@ -463,7 +463,8 @@ MonoBehaviour:
   wallJumpAwayForce: {x: 20, y: 22}
   wallDetachForce: {x: 1, y: 7}
   wallStickMaxDuration: 0.25
-  wallSlideSpeed: 3
+  wallSlideSpeedSlow: 2
+  wallSlideSpeedFast: 4
   groundLayer:
     serializedVersion: 2
     m_Bits: 512
@@ -1182,11 +1183,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 3408571411929858040, guid: 631c423030c472943af616d706d9115f,
-        type: 3}
-      propertyPath: m_Interpolate
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 631c423030c472943af616d706d9115f, type: 3}

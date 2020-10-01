@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3408571411000366213}
   - component: {fileID: 3408571411000366218}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,7 @@ GameObject:
   - component: {fileID: 3408571411144120206}
   - component: {fileID: 3408571411144120201}
   - component: {fileID: 3408571411144120207}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: '#Input'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -152,9 +152,9 @@ GameObject:
   - component: {fileID: 5464827313345929626}
   - component: {fileID: 3408571411929858041}
   - component: {fileID: 3408571411929858040}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -199,14 +199,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a36e7828e43843f4592c65d35edfed8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpModule: {fileID: 11400000, guid: 6d2c2bd5dca57ea4b97c53128e122cf1, type: 2}
-  raycaster: {fileID: 0}
-  state_MoveOnGround: {fileID: 11400000, guid: e9944751401d25f4abaa856f6fe02961, type: 2}
-  state_Aerial: {fileID: 11400000, guid: 6e34e018332c11b4390f4e4430042dbc, type: 2}
-  state_WallClimb: {fileID: 11400000, guid: ac6615f5ab89db14f868edec695a2289, type: 2}
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 512
 --- !u!114 &1257671220
 MonoBehaviour:
   m_ObjectHideFlags: 0

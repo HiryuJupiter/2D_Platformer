@@ -1,10 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-/*=== TERMINOLOGIES ===
- * COYOTE TIME: After walking off a platform, the player has a brief moment where they can still jump.
- * JUMP QUEUE TIMER: The player can cache the jump command for a brief moment while midair. If it is cached right before landing, the player will automatically jump after landing. 
- */
 
 [CreateAssetMenu(fileName = "MotorState_Aerial", menuName = "Motor States/Aerial")]
 public class MotorState_Aerial : MotorStateBase
@@ -18,11 +14,6 @@ public class MotorState_Aerial : MotorStateBase
             new Module_MoveInAir(motor), 
             new Module_StandardJump(motor),
         };
-
-        //if (settings.StickyGround)
-        //{
-        //    modules.Add(new Module_StickToSlope(motor));
-        //}
     }
 
     protected override void Transitions()
@@ -31,11 +22,9 @@ public class MotorState_Aerial : MotorStateBase
 
         if (status.isOnGround && (!status.isMovingUp || !status.isJumping))
         {
-            Debug.Log("aerial to ground");
             motor.SwitchToNewState(MotorStates.OnGround);
         }
-        //If hits a wall in air, and either you're pressing towards the wall or
-        //your momentum is going towards the wall, go to wallclimb.
+        //If you hit a wall in mid air and you're moving towards the wall, then go to wallclimb.
         else if (!status.isOnGround && !status.isMovingUp 
             && status.wallSign != 0 && 
             (status.wallSign == status.moveInputSign || status.wallSign == status.velocityXSign))

@@ -8,7 +8,7 @@ public class GameSettings : MonoBehaviour
     
     [Header("Player Movement")]
     [Range(0.1f, 4f)] [SerializeField] float steerSpeedGround = 1f; //50f
-    [Range(0.1f, 6f)] [SerializeField] float steerSpeedAir = 4f; //50f
+    [Range(0.1f, 6f)] [SerializeField] float steerSpeedAir = 5f; //50f
     [SerializeField] float playerMoveSpeed = 10;
 
     public float SteerSpeedGround => steerSpeedGround;
@@ -28,13 +28,14 @@ public class GameSettings : MonoBehaviour
     [SerializeField] Vector2 wallDetachForce = new Vector2(1f, 7f); //8.5, 7
     
     [SerializeField] float wallStickMaxDuration = .25f;
-    [SerializeField] float wallSlideSpeed = 3;
+    [SerializeField] float wallSlideSpeedSlow = 2.5f;
+    [SerializeField] float wallSlideSpeedFast = 4f;
     public Vector2 WallJumpUpForce => wallJumpUpForce;
     public Vector2 WallJumpAwayForce => wallJumpAwayForce;
     public Vector2 WallDetachForce => wallDetachForce;
     public float WallStickMaxDuration => wallStickMaxDuration;
-    public float WallSlideSpeed => wallSlideSpeed;
-
+    public float WallSlideSpeedSlow => wallSlideSpeedSlow;
+    public float WallSlideSpeedFast => wallSlideSpeedFast;
 
     [Header("Gravity")]
     [SerializeField] LayerMask groundLayer;

@@ -33,11 +33,12 @@ public class Module_Gravity : ModuleBase
         {
             if (status.isMoving)
             {
+                //If we are moving and falls on a diagonal slope (as opposed to flat ground and vertical walls), the modify velocity
                 Vector2 vel = status.currentVelocity * Time.deltaTime;
                 float velDist = vel.magnitude;
                 float distToFloor = raycaster.MovingDistanceAndAngleToObstacle(vel, velDist, out Vector2 normal);
                 float slopeAngle = Vector2.Angle(Vector2.up, normal);
-                if (distToFloor > 0 && slopeAngle < 80)
+                if (distToFloor > 0 && slopeAngle > 5 && slopeAngle < 80)
                 {
                     
                     //Draw ray - velocity

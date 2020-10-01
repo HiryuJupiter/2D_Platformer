@@ -45,17 +45,16 @@ public class Module_WallClimb : ModuleBase
 
     void WallSlide()
     {
-        //Limit sliding speed
-        if (status.currentVelocity.y < -settings.WallSlideSpeed)
-            status.currentVelocity.y = -settings.WallSlideSpeed;
+        //Limit downward sliding speed on wall
+        SetWallSlideSpeed((GameInput.MoveY < -0.1f) ? settings.WallSlideSpeedFast : settings.WallSlideSpeedSlow);
 
-        //Unstuck delay
+        //Unstuck delay (to allow the player press away from wall and jump)
         if (status.wallStickTimer > 0)
         {
-            //Fixed x movement while you have wallStick timer.
+            //Freeze x movement while you are stuck to wall.
             status.currentVelocity.x = 0;
 
-            //If not pressing away from the wall, tick the timer toward unsticking.
+            //If pressing away from the wall, tick the timer toward unsticking.
             if (status.moveInputSign != 0 && status.moveInputSign != status.wallSign)
             {
                 status.wallStickTimer -= Time.deltaTime;
@@ -73,8 +72,6 @@ public class Module_WallClimb : ModuleBase
 
     void WallJump(Vector2 v)
     {
-        
-
         v.x *= -status.wallSign;
         status.isJumping = true;
 
@@ -84,67 +81,11 @@ public class Module_WallClimb : ModuleBase
         status.jumpQueueTimer = -1f;
         status.coyoteTimer = -1f;
         motor.SwitchToNewState(MotorStates.Aerial);
+    }
+
+    void SetWallSlideSpeed (float maxSpeed)
+    {
+        if (status.currentVelocity.y < -maxSpeed)
+            status.currentVelocity.y = -maxSpeed;
     }
 }
-
-/*
-    void WallSlide()
-    {
-        //Limit sliding speed
-        if (status.currentVelocity.y < -settings.WallSlideSpeed)
-            status.currentVelocity.y = -settings.WallSlideSpeed;
-
-        //Unstuck delay
-        if (status.wallStickTimer > 0)
-        {
-            //Fixed x movement while you have wallStick timer.
-            status.currentVelocity.x = 0;
-
-            //If not pressing away from the wall, tick the timer toward unsticking.
-            if (status.moveSign != 0 && status.moveSign != status.wallSign)
-            {
-                status.wallStickTimer -= Time.deltaTime;
-                if  (status.wallStickTimer < 0)
-                {
-                    DetachFromWall();
-                }
-            }
-            else
-            {
-                status.wallStickTimer = settings.WallStickMaxDuration;
-            }
-        }
-    }
-
-    void WallJump()
-    {
-        Vector2 v;
-        if (status.wallSign == status.moveSign)
-        {
-            v = settings.WallJumpUpForce;
-        }
-        else
-        {
-            v = settings.WallJumpAwayForce;
-        }
-        SetJumpVelocity(v);
-    }
-
-    void DetachFromWall ()
-    {
-        SetJumpVelocity(settings.WallDetachForce);
-    }
-
-    void SetJumpVelocity (Vector3 v)
-    {
-        v.x *= -status.wallSign;
-        status.isJumping = true;
-
-        status.wallStickTimer = -1f;
-        status.currentVelocity = v;
-
-        status.jumpQueueTimer = -1f;
-        status.coyoteTimer = -1f;
-        motor.SwitchToNewState(MotorStates.Aerial);
-    }
- */

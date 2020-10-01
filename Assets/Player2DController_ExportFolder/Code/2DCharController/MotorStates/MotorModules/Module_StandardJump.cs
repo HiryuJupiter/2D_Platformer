@@ -1,8 +1,13 @@
 ﻿using UnityEngine;
 using UnityEngine.UIElements;
 
-[CreateAssetMenu(fileName = "Jump Burst", menuName = "Jump Modules/Burst")]
+/*=== TERMINOLOGIES ===
+ * COYOTE TIME: After walking off a platform, the player has a brief moment where they can still jump.
+ * JUMP QUEUE TIMER: The player can cache the jump command for a brief moment while midair. If it is cached right before landing, the player will automatically jump after landing. 
+ */
 
+
+[CreateAssetMenu(fileName = "Jump Burst", menuName = "Jump Modules/Burst")]
 public class Module_StandardJump : ModuleBase
 {
     const float MaxJumpQueueDuration = 0.05f;
@@ -57,11 +62,12 @@ public class Module_StandardJump : ModuleBase
         status.coyoteTimer = -1f;
 
         status.currentVelocity.y = settings.MaxJumpForce;
+        status.jumpQueueTimer = MaxJumpQueueDuration;
     }
 
     void OnJumpBtnHold()
     {
-        status.jumpQueueTimer = MaxJumpQueueDuration;
+        
     }
 
     void OnJumpBtnUp()
