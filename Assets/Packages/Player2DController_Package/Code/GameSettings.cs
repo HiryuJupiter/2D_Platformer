@@ -25,8 +25,10 @@ public class GameSettings : MonoBehaviour
     [Header("Normal Jump")]
     [SerializeField] float minJumpForce = 12f;
     [SerializeField] float maxJumpForce = 22f;
+    [SerializeField] float maxCoyoteDuration = 0.25f;
     public float MinJumpForce => minJumpForce;
     public float MaxJumpForce => maxJumpForce;
+    public float MaxCoyoteDuration => maxCoyoteDuration;
 
     [Header("Wall Jump")]
     [SerializeField] Vector2 wallJumpUpForce = new Vector2(20f, 25f); //7.5, 16

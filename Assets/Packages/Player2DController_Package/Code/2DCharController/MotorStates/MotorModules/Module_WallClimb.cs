@@ -60,7 +60,8 @@ public class Module_WallClimb : ModuleBase
                 status.wallStickTimer -= Time.deltaTime;
                 if (status.wallStickTimer < 0)
                 {
-                    WallJump(settings.WallDetachForce);
+                    //Naturally detach the player.
+                    WallJump(settings.WallDetachForce, false);
                 }
             }
             else
@@ -70,16 +71,18 @@ public class Module_WallClimb : ModuleBase
         }
     }
 
-    void WallJump(Vector2 v)
+    void WallJump(Vector2 v, bool isRealJumping = true)
     {
+        //If we slid off the wall, the player gets to jump immediately to recUperate.
+
         v.x *= -status.wallSign;
-        status.isJumping = true;
+        status.isJumping = isRealJumping;
 
         status.wallStickTimer = -1f;
         status.currentVelocity = v;
 
         status.jumpQueueTimer = -1f;
-        status.coyoteTimer = -1f;
+        status.coyoteTimer = isRealJumping ? - 1f : settings.MaxCoyoteDuration;
         motor.SwitchToNewState(MotorStates.Aerial);
     }
 

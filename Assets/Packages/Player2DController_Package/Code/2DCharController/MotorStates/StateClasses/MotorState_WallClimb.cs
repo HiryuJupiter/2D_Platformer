@@ -43,6 +43,12 @@ public class MotorState_WallClimb : MotorStateBase
         else if (status.wallSign == 0 || status.wallStickTimer <= 0f || status.isMovingUp)
         {
             motor.SwitchToNewState(MotorStates.Aerial);
+
+            //If we slid off the wall, then give coyote time for the player to recuperate.
+            if (!status.isJumping)
+            {
+                status.coyoteTimer = settings.MaxCoyoteDuration;
+            }
         }
         //else if (status.wallSign == 0 )
         //{

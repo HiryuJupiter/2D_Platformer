@@ -7,8 +7,6 @@ public class Module_MoveInAir : ModuleBase
 
     float moveXSmoothDampVelocity;
 
-    const float MaxCoyoteDuration = 0.2f;
-
     public override void ModuleEntry()
     {
         CheckIfJustWalkeOffPlatform();
@@ -24,8 +22,8 @@ public class Module_MoveInAir : ModuleBase
     {
         if (!status.isOnGround && status.isOnGroundPrevious && !status.isJumping)
         {
-            Debug.Log("Just walked off platform");
-            status.coyoteTimer = MaxCoyoteDuration;
+            //Debug.Log("Just walked off platform");
+            status.coyoteTimer = settings.MaxCoyoteDuration;
         }
     }
 }
