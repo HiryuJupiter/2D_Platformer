@@ -116,13 +116,15 @@ public class Player2DRaycaster : MonoBehaviour
         }
     }
 
-    public float DistanceAndAngleToGround_Moving(Vector2 dir, float dist, out float angle)
+    public float MovingDistanceAndAngleToObstacle(Vector2 dir, float dist, out Vector2 normal)
     {
         Vector2 origin = dir.x > 0 ? BR : BL;
         RaycastHit2D hit = Raycast(origin, dir, dist, groundLayer, Color.cyan);
-        angle = GetSlopeAngle(hit.normal);
+        normal = Vector2.up;
+        
         if (hit)
         {
+            normal = hit.normal;
             Debug.DrawRay(origin, dir, Color.red, 4f);
             Debug.DrawRay(hit.point, hit.normal, Color.yellow, 4f);
         }

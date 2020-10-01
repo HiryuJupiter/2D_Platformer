@@ -10,7 +10,6 @@ public class Module_StandardJump : ModuleBase
     public Module_StandardJump(Player2DController_Motor motor) : base(motor) { }
 
     #region Public 
-
     public override void ModuleEntry()
     {
         base.ModuleEntry();
@@ -22,8 +21,6 @@ public class Module_StandardJump : ModuleBase
 
     public override void TickUpdate()
     {
-
-
         TickTimers();
 
         if (GameInput.JumpBtnDown && status.canJump) // && !isJumping for onGround

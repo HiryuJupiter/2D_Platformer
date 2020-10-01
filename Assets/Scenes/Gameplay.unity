@@ -459,7 +459,8 @@ MonoBehaviour:
   playerMoveSpeed: 10
   minJumpForce: 12
   maxJumpForce: 22
-  wallJumpForce: {x: 20, y: 22}
+  wallJumpUpForce: {x: 20, y: 25}
+  wallJumpAwayForce: {x: 20, y: 22}
   wallDetachForce: {x: 1, y: 7}
   wallStickMaxDuration: 0.25
   wallSlideSpeed: 3

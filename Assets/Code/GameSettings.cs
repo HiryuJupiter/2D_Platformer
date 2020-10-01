@@ -22,12 +22,15 @@ public class GameSettings : MonoBehaviour
     public float MaxJumpForce => maxJumpForce;
 
     [Header("Wall Jump")]
-    [SerializeField] Vector2 wallJumpForce = new Vector2(20f, 22f); //7.5, 16
-    [SerializeField] Vector2 wallDetachForce = new Vector2(15f, 7f); //8.5, 7
+    [SerializeField] Vector2 wallJumpUpForce = new Vector2(20f, 25f); //7.5, 16
+    [SerializeField] Vector2 wallJumpAwayForce = new Vector2(20f, 22f); //7.5, 16
+
+    [SerializeField] Vector2 wallDetachForce = new Vector2(1f, 7f); //8.5, 7
     
     [SerializeField] float wallStickMaxDuration = .25f;
     [SerializeField] float wallSlideSpeed = 3;
-    public Vector2 WallJumpForce => wallJumpForce;
+    public Vector2 WallJumpUpForce => wallJumpUpForce;
+    public Vector2 WallJumpAwayForce => wallJumpAwayForce;
     public Vector2 WallDetachForce => wallDetachForce;
     public float WallStickMaxDuration => wallStickMaxDuration;
     public float WallSlideSpeed => wallSlideSpeed;

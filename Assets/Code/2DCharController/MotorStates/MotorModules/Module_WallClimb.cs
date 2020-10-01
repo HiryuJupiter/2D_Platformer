@@ -17,7 +17,14 @@ public class Module_WallClimb : ModuleBase
         base.TickUpdate();
         if (GameInput.JumpBtnDown)
         {
-            WallJump(settings.WallJumpForce);
+            if (status.wallSign == status.moveInputSign)
+            {
+                WallJump(settings.WallJumpUpForce);
+            }
+            else
+            {
+                WallJump(settings.WallJumpAwayForce);
+            }
         }
     }
 
@@ -66,6 +73,8 @@ public class Module_WallClimb : ModuleBase
 
     void WallJump(Vector2 v)
     {
+        
+
         v.x *= -status.wallSign;
         status.isJumping = true;
 

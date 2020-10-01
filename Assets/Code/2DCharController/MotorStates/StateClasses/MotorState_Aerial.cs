@@ -29,15 +29,16 @@ public class MotorState_Aerial : MotorStateBase
     {
         status.wallSign = raycaster.GetWallDirSign();
 
-        if (status.isOnGround && !status.isJumping)
+        if (status.isOnGround && (!status.isMovingUp || !status.isJumping))
         {
+            Debug.Log("aerial to ground");
             motor.SwitchToNewState(MotorStates.OnGround);
         }
         //If hits a wall in air, and either you're pressing towards the wall or
         //your momentum is going towards the wall, go to wallclimb.
         else if (!status.isOnGround && !status.isMovingUp 
             && status.wallSign != 0 && 
-            (status.wallSign == status.moveInputSign) || (status.wallSign == status.velocityXSign))
+            (status.wallSign == status.moveInputSign || status.wallSign == status.velocityXSign))
         {
             motor.SwitchToNewState(MotorStates.WallClimb);
         }

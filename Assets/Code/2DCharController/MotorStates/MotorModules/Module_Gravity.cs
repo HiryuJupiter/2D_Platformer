@@ -31,27 +31,47 @@ public class Module_Gravity : ModuleBase
         //If the falling velocity is going below the ground, then reduce the velocity.
         if (status.isFalling)
         {
-            float slopeAngle;
-
-
             if (status.isMoving)
             {
                 Vector2 vel = status.currentVelocity * Time.deltaTime;
                 float velDist = vel.magnitude;
-                float distToFloor = raycaster.DistanceAndAngleToGround_Moving(vel, velDist, out slopeAngle);
-                if (distToFloor > 0)
+                float distToFloor = raycaster.MovingDistanceAndAngleToObstacle(vel, velDist, out Vector2 normal);
+                float slopeAngle = Vector2.Angle(Vector2.up, normal);
+                if (distToFloor > 0 && slopeAngle < 80)
                 {
+                    
+                    //Draw ray - velocity
+                    //Debug.DrawRay(motor.rb.position, status.currentVelocity, Color.red, 1f);
+
                     //Reduce velocity force
-                    status.currentVelocity = status.currentVelocity.normalized * (distToFloor - 0.1f) / Time.deltaTime ;
+                    status.currentVelocity = status.currentVelocity.normalized * (distToFloor) / Time.deltaTime ;
+                    //status.currentVelocity = status.currentVelocity.normalized * (distToFloor - 0.1f) / Time.deltaTime;
+
+                    //Go to onground state!!
+
+                    //Make the character walk abit along the slope
+                    float climbDist = velDist - distToFloor;
+                    float targetX = Mathf.Cos(slopeAngle * Mathf.Deg2Rad) * climbDist * -Mathf.Sign(normal.x);
+                    float targetY = Mathf.Sin(slopeAngle * Mathf.Deg2Rad) * climbDist;
+                    //Debug.DrawLine(motor.rb.position, motor.rb.position + new Vector2(targetX, targetY), Color.blue, 1f);
+                    status.currentVelocity = (status.currentVelocity.normalized * (distToFloor) + new Vector3(targetX, targetY, 0f)) / Time.deltaTime;
+
+                    //Debug.DrawRay(motor.rb.position, status.currentVelocity, Color.red, 1f);
+
+
+                        status.isOnGround = true;
+
+                    //Debug.Log("preemptive to ground");
                 }
             }
             else
             {
-                float distance = raycaster.DistanceAndAngleToGround_NonMoving(-status.currentVelocity.y * Time.deltaTime, out slopeAngle);
+                float distance = raycaster.DistanceAndAngleToGround_NonMoving(-status.currentVelocity.y * Time.deltaTime, out float slopeAngle);
                 if (distance > 0)
                 {
                     //We want the character to have just enough fall speed to land perfectly on ground, however the rigidbody interpolation will cause the character to move a little extra on slop and cause it to slip, so we use a hack, angle * 0.08f, to reduce the fall speed so the slip effect is less apparent.
                     status.currentVelocity.y = -distance / Time.deltaTime + slopeAngle * 0.08f;
+                    status.isOnGround = true;
                 }
             }
         }

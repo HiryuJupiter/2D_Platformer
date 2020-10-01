@@ -40,8 +40,23 @@ public class MotorState_WallClimb : MotorStateBase
             status.isJumping = false;
             motor.SwitchToNewState(MotorStates.OnGround);
         }
-        else if (status.wallSign == 0 || status.wallStickTimer <= 0f || status.isMovingUp)
+        //else if (status.wallSign == 0 || status.wallStickTimer <= 0f || status.isMovingUp)
+        //{
+        //    motor.SwitchToNewState(MotorStates.Aerial);
+        //}
+        else if (status.wallSign == 0 )
         {
+            Debug.Log("1");
+            motor.SwitchToNewState(MotorStates.Aerial);
+        }
+        else if (status.wallStickTimer <= 0f)
+        {
+            Debug.Log("2");
+            motor.SwitchToNewState(MotorStates.Aerial);
+        }
+        else if (status.isMovingUp)
+        {
+            Debug.Log("3");
             motor.SwitchToNewState(MotorStates.Aerial);
         }
     }
