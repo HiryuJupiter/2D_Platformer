@@ -8,34 +8,35 @@ public class HUDManager : MonoBehaviour
     public static HUDManager instance;
 
     [SerializeField] GameObject HUD_Group;
-    [SerializeField] CoinScore coinScore;
-    
+    [SerializeField] GameObject GameWon;
+    [SerializeField] Text coinScore;
+
+    GameplaySceneManager sceneM;
 
     bool startedTimer = false;
-    
 
     void Awake()
     {
         instance = this;
+        GameWon.SetActive(false);
     }
 
     void Start()
     {
-        CloseHUD();
-        SubscribeEvents();
-    }
+        //Refeence
+        sceneM = GameplaySceneManager.Instance;
 
-    void Update()
-    {
-        if (startedTimer)
-        {
-        }
+        //HUD_Hide();
+        SubscribeEvents();
+
+        //Initialize
+        coinScore.text = "Coins: 0 / " + sceneM.coinsInScene;
     }
 
     #region Public - Setting values
-    public void SetCoins (int amount)
+    public void SetCoinsScore (int amount)
     {
-        coinScore.SetCoins(amount);
+        coinScore.text = "Coins: " + amount + " / " + sceneM.coinsInScene;
     }
 
     public void SetHealth(int amount)
@@ -43,38 +44,29 @@ public class HUDManager : MonoBehaviour
         //healthBar.SetHealth(amount);
     }
 
-    public void ResetTimer()
+    public void ShowGameWonScreen ()
     {
-        //hudTimer.ResetTimer();
+        GameWon.SetActive(true);
     }
     #endregion
 
     #region HUD visibility
-    void HUDInitialization()
+    void HUD_Reveal()
     {
-        //Reset HUD
-        ResetTimer();
-        startedTimer = true;
-
-        //Reveal HUD
         HUD_Group.SetActive(true);
     }
 
-    void CloseHUD()
+    void HUD_Hide()
     {
         HUD_Group.SetActive(false);
     }
     #endregion
 
-    #region HUD Timer
-    
-    #endregion
-
     #region Event subscribing
     void SubscribeEvents()
     {
-        //SceneEvents.GameStart.Event += HUDInitialization;
-        //SceneEvents.PlayerDead.Event += CloseHUD;
+        //SceneEvents.GameStart.Event += HUD_Reveal;
+        //SceneEvents.PlayerDead.Event += HUD_Hide;
     }
 
     void OnDisable()

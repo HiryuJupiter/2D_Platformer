@@ -5,7 +5,14 @@ using System.Collections;
 public class GameSettings : MonoBehaviour
 {
     public static GameSettings instance { get; private set; }
-    
+
+    [Header("Layers")]
+    [SerializeField] LayerMask groundLayer;
+    [SerializeField] LayerMask playerLayer;
+    public LayerMask GroundLayer => groundLayer;
+    public LayerMask PlayerLayer => playerLayer;
+
+
     [Header("Player Movement")]
     [Range(0.1f, 4f)] [SerializeField] float steerSpeedGround = 1f; //50f
     [Range(0.1f, 6f)] [SerializeField] float steerSpeedAir = 5f; //50f
@@ -38,10 +45,9 @@ public class GameSettings : MonoBehaviour
     public float WallSlideSpeedFast => wallSlideSpeedFast;
 
     [Header("Gravity")]
-    [SerializeField] LayerMask groundLayer;
+    
     [SerializeField] float maxFallSpeed = -15f;
     [SerializeField] float gravity = 80f;
-    public LayerMask GroundLayer => groundLayer;
     public float MaxFallSpeed => maxFallSpeed;
     public float Gravity => gravity;
 
