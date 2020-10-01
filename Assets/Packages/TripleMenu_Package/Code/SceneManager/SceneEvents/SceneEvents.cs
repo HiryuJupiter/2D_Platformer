@@ -8,6 +8,7 @@ public static class SceneEvents
 
     public static SceneEvent PlayerSpawn { get; private set; } = new SceneEvent("PlayerSpawn");
     public static SceneEvent PlayerDead { get; private set; } = new SceneEvent("PlayerDead");
+    public static SceneEvent GameOverBackToMain { get; private set; } = new SceneEvent("GameOverBackToMain");
     public static SceneEvent GameQuit { get; private set; } = new SceneEvent("GameQuit");
 
     //Game wide event

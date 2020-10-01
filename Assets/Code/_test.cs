@@ -127,3 +127,54 @@ public class _test : MonoBehaviour
         }
     }
 }
+
+
+/*
+ public class HealthBar : MonoBehaviour
+{
+    public Sprite[] images;
+    public Image healthBar;
+
+    public void SetHealth (int newHealth)
+    {
+        newHealth -= 1;
+        if (newHealth < images.Length && newHealth >= 0)
+        {
+            healthBar.sprite = images[newHealth];
+        }
+        else
+        {
+            Debug.LogWarning("Index " + newHealth + " is out of bounds");
+        }
+    }
+}
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Player")
+        {
+            SceneManager.instance.CoinPickup();
+            Destroy(gameObject);
+        }
+    }
+ 
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Player")
+        {
+            SceneManager.instance.ReduceHealth();
+            Destroy(gameObject);
+        }
+    }
+
+    public void UpdateTimer()
+    {
+        timeElapsed += Time.deltaTime;
+        string minutes = Mathf.Floor(timeElapsed / 60f).ToString("00");
+        string seconds = Mathf.Floor(timeElapsed % 60).ToString("00");
+        string miliseconds = Mathf.Floor((timeElapsed * 100) % 100).ToString("00");
+
+        timer.text = minutes + ":" + seconds + ":" + miliseconds;
+    }
+
+ */
