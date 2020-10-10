@@ -17,10 +17,12 @@ public class GameSettings : MonoBehaviour
     [Range(0.1f, 4f)] [SerializeField] float steerSpeedGround = 1f; //50f
     [Range(0.1f, 6f)] [SerializeField] float steerSpeedAir = 5f; //50f
     [SerializeField] float playerMoveSpeed = 10;
-
+    [SerializeField] float playerCrawlSpeed = 6;
     public float SteerSpeedGround => steerSpeedGround;
     public float SteerSpeedAir => steerSpeedAir;
     public float PlayerMoveSpeed => playerMoveSpeed;
+    public float PlayerCrawlSpeed => playerCrawlSpeed;
+
 
     [Header("Normal Jump")]
     [SerializeField] float minJumpForce = 12f;
@@ -53,6 +55,11 @@ public class GameSettings : MonoBehaviour
     public float MaxFallSpeed => maxFallSpeed;
     public float Gravity => gravity;
 
+    [Header("Crouch")]
+    [SerializeField] Vector2 crouchOffset;
+    [SerializeField] Vector2 crouchSize;
+    public Vector2 CrouchOffset => crouchOffset;
+    public Vector2 CrouchSize => crouchSize;
 
     [Header("Physics  behavior")]
     [SerializeField] bool stickyGround = true;

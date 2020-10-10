@@ -3,31 +3,34 @@ using UnityEngine;
 using UnityEngine.Events;
 
 
-[DefaultExecutionOrder(-2)]
-[RequireComponent(typeof(Player2DController_Graphics))]
-[RequireComponent(typeof(Player2DController_Motor))]
+
+[DefaultExecutionOrder(-100)]
+[RequireComponent(typeof(Player2DMotor))]
+[RequireComponent(typeof(Player2DFeedbacks))]
+[RequireComponent(typeof(Player2DHealth))]
+
 public class Player2DController : MonoBehaviour
 {
 	//Components and classes
-	Player2DController_Motor motor;
-	Player2DController_Graphics graphics;
-
-
+	Player2DMotor motor;
+	Player2DFeedbacks feedbacks;
+	Player2DHealth health;
 	#region MonoBehavior
-	void Awake()
+	public void Awake()
 	{
-		motor = GetComponent<Player2DController_Motor>();
-		graphics = GetComponent<Player2DController_Graphics>();
+		motor = GetComponent<Player2DMotor>();
+		feedbacks = GetComponentInChildren<Player2DFeedbacks>();
+		health = GetComponent<Player2DHealth>();
 	}
 
-    void Update()
+	public void Update()
     {
-		
+		//motor.OnUpdate();
+		//graphics.OnUpdate();
 	}
-    void FixedUpdate()
+	public void FixedUpdate()
 	{
-		
-		
+		//motor.OnFixedUpdate();
 	}
 	#endregion
 }

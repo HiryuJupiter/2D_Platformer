@@ -17,11 +17,12 @@ public class GameManager : Singleton<GameManager>
             instance = this;
             DontDestroyOnLoad(this);
         }
-    }
+        else
+        {
+            Destroy(this);
+            return;
+        }
 
-    //Awake is called before OnLevelWasLoaded
-    private void OnLevelWasLoaded(int level)
-    {
         if (loadeSaveFile)
         {
             LoadGameData();

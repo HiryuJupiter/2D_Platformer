@@ -36,7 +36,6 @@ public class _test : MonoBehaviour
         BL_offset = new Vector3(-b.extents.x, -b.extents.y, 0f);
         TR_offset = new Vector3(b.extents.x, b.extents.y, 0f);
         TL_offset = new Vector3(-b.extents.x, b.extents.y, 0f);
-
     }
 
     void Update()
