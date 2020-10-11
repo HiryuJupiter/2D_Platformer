@@ -2,11 +2,15 @@
 
 public class GameInput : MonoBehaviour
 {
-    public static float MoveX { get; private set; }
-    public static float MoveY { get; private set; }
-    public static bool JumpBtnDown { get; private set; }
-    public static bool JumpBtn { get; private set; }
-    public static bool JumpBtnUp { get; private set; }
+    public static float MoveX       { get; private set; }
+    public static float MoveY       { get; private set; }
+    public static bool JumpBtnDown  { get; private set; }
+    public static bool JumpBtn      { get; private set; }
+    public static bool JumpBtnUp    { get; private set; }
+    public static bool PressedLeft  => MoveX < -0.1f;
+    public static bool PressedRight => MoveX >  0.1f;
+    public static bool PressedDown  => MoveY < -0.1f;
+    public static bool PressedUp    => MoveY <  0.1f;
 
     void Update()
     {

@@ -646,6 +646,9 @@ MonoBehaviour:
   wallStickMaxDuration: 0.25
   wallSlideSpeedSlow: 2
   wallSlideSpeedFast: 4
+  hurtSlideSpeed: 20
+  hurtDirection: {x: 20, y: 25}
+  hurtDuration: 2
   maxFallSpeed: -15
   gravity: 80
   crouchOffset: {x: 0, y: 0}
@@ -1992,6 +1995,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 3408571411929858040, guid: 631c423030c472943af616d706d9115f,
+        type: 3}
+      propertyPath: m_Interpolate
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 631c423030c472943af616d706d9115f, type: 3}

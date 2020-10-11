@@ -27,10 +27,18 @@ public class Player2DController : MonoBehaviour
     {
 		//motor.OnUpdate();
 		//graphics.OnUpdate();
+
+		if (Input.GetKeyDown(KeyCode.H))
+			DamagePlayer(Vector2.zero, 1);
 	}
 	public void FixedUpdate()
 	{
 		//motor.OnFixedUpdate();
 	}
 	#endregion
+
+	public void DamagePlayer(Vector2 enemyPos, int damage)
+	{
+		motor.DamagePlayer(enemyPos);
+	}
 }

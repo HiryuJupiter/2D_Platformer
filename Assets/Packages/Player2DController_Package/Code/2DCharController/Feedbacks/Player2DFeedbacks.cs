@@ -23,14 +23,13 @@ public class Player2DFeedbacks : MonoBehaviour
         SetFacingToRight(true);
     }
 
-
     public void SetFacingBasedOnInput ()
     {
-        if (GameInput.MoveX > 0.1f)
+        if (GameInput.PressedRight)
         {
             SetFacingToRight(true);
         }
-        else if (GameInput.MoveX < -0.1f)
+        else if (GameInput.PressedLeft)
         {
             SetFacingToRight(false);
         }
@@ -49,6 +48,8 @@ public class Player2DFeedbacks : MonoBehaviour
             transform.localScale = faceLeftScale;
         }
     }
+
+
 }
 
 public enum PlayerAnimations { Idle, Run, Crawl, Jump}

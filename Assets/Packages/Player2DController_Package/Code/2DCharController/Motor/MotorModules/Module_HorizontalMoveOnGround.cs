@@ -14,27 +14,51 @@ public class Module_MoveOnGround : ModuleBase
     public override void ModuleEntry()
     {
         base.ModuleEntry();
-        crawling = false;
+        Stand();
     }
 
     public override void TickUpdate()
     {
         base.TickUpdate();
+
         feedback.SetFacingBasedOnInput();
 
-        if (!crawling && GameInput.MoveY < -0.1f)
-        {
-            crawling = true;
-        }
-        else if (crawling && GameInput.MoveY > 0.1f)
-        {
-            crawling = false;
-        }
+        StanceUpdate();
     }
 
     public override void TickFixedUpdate()
     {
-        //Move character
+        //Modify x-velocity
         motorStatus.currentVelocity.x = Mathf.SmoothDamp(motorStatus.currentVelocity.x, GameInput.MoveX * moveSpeed, ref moveXSmoothDampVelocity, settings.SteerSpeedGround * Time.deltaTime);
+    }
+
+    public override void ModuleExit()
+    {
+        base.ModuleExit();
+        crawling = false;
+    }
+
+    void StanceUpdate ()
+    {
+        if (!crawling && GameInput.PressedDown)
+        {
+            Crawl();
+        }
+        else if (crawling && !GameInput.PressedDown)
+        {
+            Stand();
+        }
+    }
+
+    void Stand ()
+    {
+        crawling = false;
+        feedback.Animator.PlayOnGround();
+    }
+
+    void Crawl ()
+    {
+        crawling = true;
+        feedback.Animator.PlayCrouch();
     }
 }

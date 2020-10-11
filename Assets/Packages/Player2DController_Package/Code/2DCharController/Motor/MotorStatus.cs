@@ -25,10 +25,14 @@ public class MotorStatus
     public float wallStickTimer;
     public bool isWallSliding;
 
+    //Hurt state
+    public Vector2 lastEnemyPosition;
+
     //Convenience properties
     public bool isFalling => currentVelocity.y < 0f;
     public bool isMovingUp => currentVelocity.y > 0f;
     public bool isMoving => moveInputSign != 0;
+    //public bool canJump => isOnGround || (coyoteTimer > 0f && !isJumping);
     public bool canJump => isOnGround || isWallSliding || (coyoteTimer > 0f && !isJumping);
     public bool justLanded => !isOnGroundPrevious && isOnGround;
 

@@ -46,7 +46,7 @@ public class Module_WallClimb : ModuleBase
     void WallSlide()
     {
         //Limit downward sliding speed on wall
-        SetWallSlideSpeed((GameInput.MoveY < -0.1f) ? settings.WallSlideSpeedFast : settings.WallSlideSpeedSlow);
+        SetWallSlideSpeed(GameInput.PressedDown ? settings.WallSlideSpeedFast : settings.WallSlideSpeedSlow);
 
         //Unstuck delay (to allow the player press away from wall and jump)
         if (motorStatus.wallStickTimer > 0)

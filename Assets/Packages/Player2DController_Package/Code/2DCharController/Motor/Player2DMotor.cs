@@ -11,6 +11,7 @@ public class Player2DMotor : MonoBehaviour
     
     Rigidbody2D rb;
     Player2DFeedbacks Feedbacks;
+    GameSettings settings;
 
     //States
     MotorStates currentStateType;
@@ -38,6 +39,7 @@ public class Player2DMotor : MonoBehaviour
     #region MonoBehiavor
     void Awake()
     {
+        
         //Reference
         rb = GetComponent<Rigidbody2D>();
         raycaster = GetComponent<MotorRaycaster>();
@@ -47,35 +49,46 @@ public class Player2DMotor : MonoBehaviour
         status = new MotorStatus();
         stateClassLookup = new Dictionary<MotorStates, MotorStateBase>
         {
-            {MotorStates.OnGround,    new MotorState_MoveOnGround(this, Feedbacks)},
-            {MotorStates.Aerial,      new MotorState_Aerial(this, Feedbacks)},
-            {MotorStates.WallClimb,   new MotorState_WallClimb(this, Feedbacks)}
+            {MotorStates.OnGround,  new MotorState_MoveOnGround(this, Feedbacks)},
+            {MotorStates.Aerial,    new MotorState_Aerial(this, Feedbacks)},
+            {MotorStates.WallClimb, new MotorState_WallClimb(this, Feedbacks)},
+            {MotorStates.Hurt,      new MotorState_Hurt(this, Feedbacks)},
         };
 
         currentStateType = MotorStates.OnGround;
         currentStateClass = stateClassLookup[currentStateType];
     }
 
+    void Start()
+    {
+        settings = GameSettings.instance;
+    }
+
     void Update()
     {
-
         currentStateClass?.TickUpdate();
     }
 
     void FixedUpdate()
     {
+        status.CacheCurrentValuesToOld();
         raycaster.UpdateOriginPoints();
         CacheStatusCalculations();
 
         currentStateClass?.TickFixedUpdate();
 
         rb.velocity = status.currentVelocity;
-        status.CacheCurrentValuesToOld();
     }
     #endregion
 
     #region Public 
     public void ForceNudge(Vector2 nudge) => rb.position += nudge;
+
+    public void DamagePlayer(Vector2 enemyPos)
+    {
+        status.lastEnemyPosition = enemyPos;
+        SwitchToNewState(MotorStates.Hurt);
+    }
     #endregion
 
     #region Pre-calculations
@@ -96,7 +109,9 @@ public class Player2DMotor : MonoBehaviour
         GUI.Label(new Rect(20, 100, 290, 20), "onGroundPrevious: " + status.isOnGroundPrevious);
         GUI.Label(new Rect(20, 120, 290, 20), "GameInput.MoveX: " + GameInput.MoveX);
         GUI.Label(new Rect(20, 140, 290, 20), "movingSign: " + status.moveInputSign);
-        GUI.Label(new Rect(20, 160, 290, 20), "targetVelocity: " + status.currentVelocity);
+        GUI.Label(new Rect(20, 160, 290, 20), "isMoving: " + status.isMoving);
+        GUI.Label(new Rect(20, 180, 290, 20), "targetVelocity: " + status.currentVelocity);
+
 
         GUI.Label(new Rect(200, 0, 290, 20), "=== JUMPING === ");
         GUI.Label(new Rect(200, 20, 290, 20), "coyoteTimer: " + status.coyoteTimer);

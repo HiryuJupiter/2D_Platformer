@@ -78,53 +78,12 @@ public class MotorRaycaster : MonoBehaviour
         //Debug.DrawRay(TR_inner, Vector3.right, Color.blue);
     }
 
-
-    public float DistanceToGround (float yVelocity)
-    {
-        //Find the position this object would be when on the ground. 
-
-        RaycastHit2D left = Raycast(BL, Vector2.down, yVelocity, groundLayer, Color.cyan);
-        RaycastHit2D right = Raycast(BR, Vector2.down, yVelocity, groundLayer, Color.magenta);
-
-        float leftDist;
-        float rightDist;
-
-        if (left)
-            leftDist = left.distance;
-        if (right)
-            rightDist = right.distance;
-
-        if (!left && !right) //Neither hits
-        {
-            return 0f;
-        }
-        else if (left && !right) //Left hits
-        {
-            return left.distance;
-        }
-        else if (!left && right) //Right hits
-        {
-            return right.distance;
-        }
-        else //Both hits
-        { 
-            if (left.distance < right.distance)
-            {
-                return left.distance;
-            }
-            else
-            {
-                return right.distance;
-            }
-        }
-    }
-
-    public float MovingDistanceAndAngleToObstacle(Vector2 dir, float dist, out Vector2 normal)
+    public float DistanceAndAngleToGround_Moving(Vector2 dir, float dist, out Vector2 normal)
     {
         Vector2 origin = dir.x > 0 ? BR : BL;
         RaycastHit2D hit = Raycast(origin, dir, dist, groundLayer, Color.cyan);
         normal = Vector2.up;
-        
+
         if (hit)
         {
             normal = hit.normal;
@@ -141,13 +100,12 @@ public class MotorRaycaster : MonoBehaviour
         RaycastHit2D left = Raycast(BL, Vector2.down, yVelocity, groundLayer, Color.cyan);
         RaycastHit2D right = Raycast(BR, Vector2.down, yVelocity, groundLayer, Color.magenta);
 
-        float leftDist;
-        float rightDist;
+        //if (left)
+        //    Debug.DrawRay(left.point, left.normal, Color.cyan, 0.1f);
+        //else if (right)
+        //    Debug.DrawRay(right.point, right.normal, Color.magenta, 0.1f);
 
-        if (left)
-            leftDist = left.distance;
-        if (right)
-            rightDist = right.distance;
+
 
         if (!left && !right) //Neither hits
         {
@@ -161,6 +119,12 @@ public class MotorRaycaster : MonoBehaviour
         }
         else if (!left && right) //Right hits
         {
+            //Debug.DrawRay(BR, right.normal, Color.grey, 0.1f);
+            //Debug.DrawRay(BR + Vector2.down * yVelocity, right.normal, Color.white, 0.1f);
+
+            //Debug.DrawRay(BR + Vector2.down * right.distance, right.normal, Color.magenta, 0.1f);
+            //Debug.DrawRay(right.point, Vector3.right, Color.grey, 0.1f);
+
             angle = GetSlopeAngle(right.normal);
             return right.distance;
         }
@@ -182,7 +146,7 @@ public class MotorRaycaster : MonoBehaviour
     public float CheckForCeilingSideNudge(float yVelocity)
     {
         //If 
-        bool L_inner= Raycast(TL_inner, Vector2.up, yVelocity, groundLayer, Color.cyan);
+        bool L_inner = Raycast(TL_inner, Vector2.up, yVelocity, groundLayer, Color.cyan);
         bool L_outer = Raycast(TL_outer, Vector2.up, yVelocity, groundLayer, Color.cyan);
         bool R_inner = Raycast(TR_inner, Vector2.up, yVelocity, groundLayer, Color.magenta);
         bool R_outer = Raycast(TR_outer, Vector2.up, yVelocity, groundLayer, Color.magenta);
@@ -203,7 +167,7 @@ public class MotorRaycaster : MonoBehaviour
 
     public int GetWallDirSign()
     {
-        if (Raycast(TR_outer, Vector2.right, checkDist, groundLayer, Color.blue) || 
+        if (Raycast(TR_outer, Vector2.right, checkDist, groundLayer, Color.blue) ||
             Raycast(BR, Vector2.right, checkDist, groundLayer, Color.blue))
         {
             return 1;
@@ -241,7 +205,7 @@ public class MotorRaycaster : MonoBehaviour
         return Physics2D.Raycast(origin, dir, dist, mask);
     }
 
-    float GetSlopeAngle (Vector2 slopeNormal)
+    float GetSlopeAngle(Vector2 slopeNormal)
     {
         return Vector2.Angle(slopeNormal, Vector2.up);
     }

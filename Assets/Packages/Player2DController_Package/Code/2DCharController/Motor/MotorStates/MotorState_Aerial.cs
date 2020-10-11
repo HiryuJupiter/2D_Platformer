@@ -18,13 +18,13 @@ public class MotorState_Aerial : MotorStateBase
     public override void StateEntry()
     {
         base.StateEntry();
-        feedback.Animator.SetOnGround(false);
+        feedback.Animator.PlayAerial();
     }
 
     public override void TickUpdate()
     {
         base.TickUpdate();
-        feedback.Animator.SetYVelocity(motorStatus.currentVelocity.y);
+        feedback.Animator.SetFloat_YVelocity(motorStatus.currentVelocity.y);
     }
 
     protected override void Transitions()

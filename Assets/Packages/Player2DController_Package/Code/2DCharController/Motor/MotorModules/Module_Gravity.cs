@@ -9,8 +9,7 @@ public class Module_Gravity : ModuleBase
 
     public override void TickFixedUpdate()
     {
-        CheckIfJustWalkeOffPlatform();
-
+        //Apply gravity when not on ground
         if (motorStatus.isOnGround)
         {
             if (motorStatus.isFalling && motorStatus.moveInputSign == 0)
@@ -38,7 +37,7 @@ public class Module_Gravity : ModuleBase
                 //If we are moving and falls on a diagonal slope (as opposed to flat ground and vertical walls), the modify velocity
                 Vector2 vel = motorStatus.currentVelocity * Time.deltaTime;
                 float velDist = vel.magnitude;
-                float distToFloor = raycaster.MovingDistanceAndAngleToObstacle(vel, velDist, out Vector2 normal);
+                float distToFloor = raycaster.DistanceAndAngleToGround_Moving(vel, velDist, out Vector2 normal);
                 float slopeAngle = Vector2.Angle(Vector2.up, normal);
                 if (distToFloor > 0 && slopeAngle > 5 && slopeAngle < 80)
                 {
@@ -62,7 +61,8 @@ public class Module_Gravity : ModuleBase
                     //Debug.DrawRay(motor.rb.position, status.currentVelocity, Color.red, 1f);
 
 
-                        motorStatus.isOnGround = true;
+                    //Immediately go into ground mode, to freeze y-velocity and prevent slipping down slope.
+                    motorStatus.isOnGround = true;
 
                     //Debug.Log("preemptive to ground");
                 }
@@ -73,8 +73,11 @@ public class Module_Gravity : ModuleBase
                 if (distance > 0)
                 {
                     //We want the character to have just enough fall speed to land perfectly on ground, however the rigidbody interpolation will cause the character to move a little extra on slop and cause it to slip, so we use a hack, angle * 0.08f, to reduce the fall speed so the slip effect is less apparent.
-                    motorStatus.currentVelocity.y = -distance / Time.deltaTime + slopeAngle * 0.08f;
-                    motorStatus.isOnGround = true;
+                    motorStatus.currentVelocity.y = -distance / Time.deltaTime;
+                    //motorStatus.currentVelocity.y = -distance;
+
+                    //motorStatus.currentVelocity.y = -distance / Time.deltaTime + slopeAngle * 0.08f;
+                    Debug.DrawRay(raycaster.BR + new Vector2(0f, motorStatus.currentVelocity.y* Time.deltaTime), Vector3.right, Color.blue, 1f);
                 }
             }
         }
@@ -85,16 +88,6 @@ public class Module_Gravity : ModuleBase
         Debug.DrawRay(raycaster.BR, motorStatus.currentVelocity * Time.deltaTime, Color.cyan, 4f);
         yield return null;
         Debug.DrawRay(raycaster.BR, motorStatus.currentVelocity * Time.deltaTime, Color.blue, 4f);
-
-    }
-
-    void CheckIfJustWalkeOffPlatform()
-    {
-        if (!motorStatus.isOnGround && motorStatus.isOnGroundPrevious && !motorStatus.isJumping)
-        {
-            Debug.Log("Just walked off platform");
-            motorStatus.coyoteTimer = settings.MaxCoyoteDuration;
-        }
     }
 }
 

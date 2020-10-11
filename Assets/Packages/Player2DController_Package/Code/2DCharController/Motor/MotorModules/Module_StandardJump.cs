@@ -28,14 +28,18 @@ public class Module_StandardJump : ModuleBase
     {
         TickTimers();
 
-        if (GameInput.JumpBtnDown && motorStatus.canJump) // && !isJumping for onGround
-        {
-            OnJumpBtnDown();
-        }
 
-        if (GameInput.JumpBtn)
+
+        if (GameInput.JumpBtnDown) // && !isJumping for onGround
         {
-            OnJumpBtnHold();
+            if (motorStatus.canJump)
+            {
+                OnJumpBtnDown();
+            }
+            //else
+            //{
+            //    motorStatus.jumpQueueTimer = MaxJumpQueueDuration;
+            //}
         }
 
         if (GameInput.JumpBtnUp)
@@ -47,12 +51,34 @@ public class Module_StandardJump : ModuleBase
     public override void TickFixedUpdate()
     {
         base.TickFixedUpdate();
+        CheckIfJustWalkeOffPlatform();
+
         if (motorStatus.justLanded)
         {
             motorStatus.isJumping = false;
             motorStatus.coyoteTimer = -1f;
         }
     }
+
+    //public override void TickFixedUpdate()
+    //{
+    //    base.TickFixedUpdate();
+    //    CheckIfJustWalkeOffPlatform();
+
+    //    if (motorStatus.justLanded)
+    //    {
+    //        //If player just landed and has a jump queued up.
+    //        //if (motorStatus.jumpQueueTimer > 0f)
+    //        //{
+    //        //    OnJumpBtnDown();
+    //        //}
+    //        //else
+    //        {
+    //            motorStatus.isJumping = false;
+    //            motorStatus.coyoteTimer = -1f;
+    //        }
+    //    }
+    //}
     #endregion
 
     void OnJumpBtnDown()
@@ -62,12 +88,6 @@ public class Module_StandardJump : ModuleBase
         motorStatus.coyoteTimer = -1f;
 
         motorStatus.currentVelocity.y = settings.MaxJumpForce;
-        motorStatus.jumpQueueTimer = MaxJumpQueueDuration;
-    }
-
-    void OnJumpBtnHold()
-    {
-        
     }
 
     void OnJumpBtnUp()
@@ -88,6 +108,14 @@ public class Module_StandardJump : ModuleBase
         if (motorStatus.jumpQueueTimer > 0f)
         {
             motorStatus.jumpQueueTimer -= Time.deltaTime;
+        }
+    }
+
+    void CheckIfJustWalkeOffPlatform()
+    {
+        if (!motorStatus.isOnGround && motorStatus.isOnGroundPrevious && !motorStatus.isJumping)
+        {
+            motorStatus.coyoteTimer = settings.MaxCoyoteDuration;
         }
     }
 }

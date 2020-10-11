@@ -48,6 +48,15 @@ public class GameSettings : MonoBehaviour
     public float WallSlideSpeedSlow => wallSlideSpeedSlow;
     public float WallSlideSpeedFast => wallSlideSpeedFast;
 
+    [Header("Hurt State")]
+    [Range(10f, 50f)] [SerializeField] float hurtSlideSpeed = 20f; //50f
+
+    [SerializeField] Vector2 hurtDirection = new Vector2(20f, 25f);
+    [SerializeField] float hurtDuration = 0.5f;
+    public float HurtSlideSpeed => hurtSlideSpeed;
+    public Vector2 HurtDirection => hurtDirection;
+    public float HurtDuration => hurtDuration;
+
     [Header("Gravity")]
     
     [SerializeField] float maxFallSpeed = -15f;

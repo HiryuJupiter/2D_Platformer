@@ -1,4 +1,4 @@
 ﻿public enum MotorStates
 {
-    OnGround, Aerial, WallClimb,
+    OnGround, Aerial, WallClimb, Hurt,
 }

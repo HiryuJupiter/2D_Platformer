@@ -28,13 +28,13 @@ public class MotorState_MoveOnGround : MotorStateBase
         //Immediately stick to slope, don't wait until next frame.
         if (settings.StickyGround)
             stickToSlope.TickFixedUpdate();
-        feedback.Animator.SetOnGround(true);
+        feedback.Animator.PlayOnGround();
     }
 
     public override void TickUpdate()
     {
         base.TickUpdate();
-        feedback.Animator.SetXVelocity(Mathf.Abs(motorStatus.currentVelocity.x));
+        feedback.Animator.SetFloat_XVelocity(Mathf.Abs(motorStatus.currentVelocity.x));
     }
 
     protected override void Transitions()
