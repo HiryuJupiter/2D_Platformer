@@ -7,47 +7,54 @@ using System.Linq;
 [RequireComponent(typeof(MotorRaycaster))]
 public class Player2DMotor : MonoBehaviour
 {
-    //Class and components
-    
-    Rigidbody2D rb;
-    Player2DFeedbacks Feedbacks;
+    //Classes and inspector components
+    Rigidbody2D rb; //The rigidbody component
+    Player2DFeedbacks Feedbacks; //The script responsible for display visuals, changing animations
     GameSettings settings;
 
     //States
-    MotorStates currentStateType;
-    MotorStateBase currentStateClass;
-    Dictionary<MotorStates, MotorStateBase> stateClassLookup;
+    MotorStates currentStateType; // The current state represented by a custom enum type
+    MotorStateBase currentStateClass; //The current active state class
+    Dictionary<MotorStates, MotorStateBase> stateClassLookup; // The lookup table that matches an enum state to the corresponding class.
 
-    public MotorStatus status { get; private set; }
-    public MotorRaycaster raycaster { get; private set; }
+    public MotorStatus status { get; private set; } //A custom class that stores all status (e.g. isOnGround) in one place
+    public MotorRaycaster raycaster { get; private set; } //The component that does the raycast checks. 
 
 
-    #region Public
-    public void SwitchToNewState(MotorStates newStateType)
+    #region Public 
+    public void SwitchToNewState(MotorStates newStateType) //This method tells the class to change to a state
     {
-        if (currentStateType != newStateType)
+        if (currentStateType != newStateType) //Only change the state when we're not already there
         {
             currentStateType = newStateType;
 
-            currentStateClass.StateExit();
+            currentStateClass.StateExit(); //Tell the current state we're exiting, so it can perform clean ups.
             currentStateClass = stateClassLookup[newStateType];
-            currentStateClass.StateEntry();
+            currentStateClass.StateEntry(); //Tell the new state we're entering, so it can perform initializations.
         }
     }
+
+    public void ForceNudge(Vector2 nudge) => rb.position += nudge; //This is used for edge cases where we want to force a movement on the player.
+
+    public void DamagePlayer(Vector2 enemyPos) //Damage the player, the player will cache the enemy position and then go to hurt-state, which will handle what to do with the event.
+    {
+        status.lastEnemyPosition = enemyPos;
+        SwitchToNewState(MotorStates.Hurt);
+    }
     #endregion
+
 
     #region MonoBehiavor
     void Awake()
     {
-        
         //Reference
         rb = GetComponent<Rigidbody2D>();
         raycaster = GetComponent<MotorRaycaster>();
         Feedbacks = GetComponentInChildren<Player2DFeedbacks>();
 
-        //Initialize
+        //Initialize various variables
         status = new MotorStatus();
-        stateClassLookup = new Dictionary<MotorStates, MotorStateBase>
+        stateClassLookup = new Dictionary<MotorStates, MotorStateBase> //Store all the FSM classes using their common base class
         {
             {MotorStates.OnGround,  new MotorState_MoveOnGround(this, Feedbacks)},
             {MotorStates.Aerial,    new MotorState_Aerial(this, Feedbacks)},
@@ -61,40 +68,31 @@ public class Player2DMotor : MonoBehaviour
 
     void Start()
     {
-        settings = GameSettings.instance;
+        settings = GameSettings.instance; //Reference static singletons
     }
 
     void Update()
     {
-        currentStateClass?.TickUpdate();
+        currentStateClass?.TickUpdate(); //Tell the non-monobehavior state classes we want to update
     }
 
     void FixedUpdate()
     {
-        status.CacheCurrentValuesToOld();
-        raycaster.UpdateOriginPoints();
-        CacheStatusCalculations();
+        status.CacheCurrentValuesToOld(); //Cache the values in the previous frame before we update them
+        raycaster.UpdateOriginPoints(); //We use a specialist raycaster class to do all the raycasting logic
+        CacheStatusCalculations(); //Certain calculations can be done once and cached for all scripts to use later.
 
-        currentStateClass?.TickFixedUpdate();
+        currentStateClass?.TickFixedUpdate(); 
 
-        rb.velocity = status.currentVelocity;
-    }
-    #endregion
-
-    #region Public 
-    public void ForceNudge(Vector2 nudge) => rb.position += nudge;
-
-    public void DamagePlayer(Vector2 enemyPos)
-    {
-        status.lastEnemyPosition = enemyPos;
-        SwitchToNewState(MotorStates.Hurt);
+        rb.velocity = status.currentVelocity; //After all velocity calculations are finalized, we assign it to the rigidbody
     }
     #endregion
 
     #region Pre-calculations
     void CacheStatusCalculations()
     {
-        status.isOnGround = raycaster.IsOnGround;
+        //Certain calculations can be done once and cached for all scripts to use later.
+        status.isOnGround = raycaster.IsOnGround; 
         status.moveInputSign = MathsUtil.SignAllowingZero(GameInput.MoveX);
         status.velocityXSign = MathsUtil.SignAllowingZero(status.currentVelocity.x);
     }
