@@ -1,0 +1,1235 @@
+fileFormatVersion: 2
+guid: b5ce51cd4885a3e49995b3c88a8fdf73
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 5602674871123832869
+    second: Dirt9x9_TL
+  - first:
+      213: 8012317417542285244
+    second: Dirt9x9_T
+  - first:
+      213: -3364102489921809927
+    second: Dirt9x9_TR
+  - first:
+      213: 7416530882912035453
+    second: DirtColumn_T
+  - first:
+      213: 5510080587434760305
+    second: Prop_Carrot
+  - first:
+      213: -6727190504836741212
+    second: Prop_RabbitCurrency
+  - first:
+      213: 7534877633587924
+    second: Prop_Bag
+  - first:
+      213: -4959496818690199380
+    second: Dirt9x9_L
+  - first:
+      213: 591966442120615503
+    second: Dirt9x9_Center
+  - first:
+      213: -1587137568400969399
+    second: Dirt9x9_R
+  - first:
+      213: 4546442864721026306
+    second: DirtColumn_Middle
+  - first:
+      213: 4470783208030299948
+    second: Dirt9x9_BL
+  - first:
+      213: 6700427847129408472
+    second: Dirt9x9_B
+  - first:
+      213: 4441187923268261173
+    second: Dirt9x9_BR
+  - first:
+      213: -3040991905261329020
+    second: DirtColumn_B
+  - first:
+      213: -8777172637784218250
+    second: DirtFlat_L
+  - first:
+      213: -8758111117745449977
+    second: DirtFlat_M
+  - first:
+      213: -8025065083719371520
+    second: DirtFlat_R
+  - first:
+      213: 4706816898963222774
+    second: DirtSingle
+  - first:
+      213: -7102383565234580741
+    second: PanelBlock_TL
+  - first:
+      213: -7682626110893186444
+    second: PanelBlock_T
+  - first:
+      213: 4136215768706793567
+    second: PanelBlock_TR
+  - first:
+      213: -5284844005119136481
+    second: PanelColumn_T
+  - first:
+      213: 5247272031296399236
+    second: PanelBlock_L
+  - first:
+      213: 4743608816788106250
+    second: PanelBlock_M
+  - first:
+      213: -7647426354238261932
+    second: PanelBlock_R
+  - first:
+      213: 1563179813728198727
+    second: PanelColumn_M
+  - first:
+      213: -7451014080252340460
+    second: HP_1
+  - first:
+      213: -3223244830182042331
+    second: HP_2
+  - first:
+      213: -3386687055778116557
+    second: HP_3
+  - first:
+      213: -7412762613994512603
+    second: PanelBlock_BL
+  - first:
+      213: 6410593803253089258
+    second: PanelBlock_B
+  - first:
+      213: 7722369162100896936
+    second: PanelBlock_BR
+  - first:
+      213: -8529605819994534874
+    second: PanelColumn_B
+  - first:
+      213: 4848666289716612539
+    second: PanelFlat_L
+  - first:
+      213: -8442402005448297408
+    second: PanelFlat_M
+  - first:
+      213: -2481940696253847605
+    second: PanelFlat_R
+  - first:
+      213: -3901010684557215521
+    second: PanelSingle
+  - first:
+      213: 757413642394135905
+    second: tilee-Sheet_38
+  - first:
+      213: -4194129440679551652
+    second: tilee-Sheet_39
+  - first:
+      213: -9105686027535991581
+    second: tilee-Sheet_40
+  - first:
+      213: 4914153294856506763
+    second: tilee-Sheet_41
+  - first:
+      213: -4055963084994245045
+    second: tilee-Sheet_42
+  - first:
+      213: -7762281597013033967
+    second: tilee-Sheet_43
+  - first:
+      213: 5210026351569239291
+    second: tilee-Sheet_44
+  - first:
+      213: 4911668780812836379
+    second: tilee-Sheet_45
+  - first:
+      213: 58195265546816620
+    second: tilee-Sheet_46
+  - first:
+      213: 6517434138798891051
+    second: tilee-Sheet_47
+  - first:
+      213: 7742598409607382134
+    second: tilee-Sheet_48
+  - first:
+      213: -1647170826558967716
+    second: tilee-Sheet_49
+  - first:
+      213: -3851793724511532098
+    second: tilee-Sheet_50
+  - first:
+      213: -2205945923902681360
+    second: tilee-Sheet_51
+  - first:
+      213: -6614379083021984303
+    second: tilee-Sheet_52
+  - first:
+      213: -294137979425177648
+    second: tilee-Sheet_53
+  - first:
+      213: -6272824574502025991
+    second: tilee-Sheet_54
+  - first:
+      213: -4450940629577146251
+    second: tilee-Sheet_55
+  - first:
+      213: -648791282284469255
+    second: tilee-Sheet_56
+  - first:
+      213: 4127145720350174386
+    second: tilee-Sheet_57
+  - first:
+      213: 3239264287066352926
+    second: tilee-Sheet_58
+  - first:
+      213: 6365214513017996829
+    second: tilee-Sheet_59
+  - first:
+      213: 7530543594356995528
+    second: tilee-Sheet_60
+  - first:
+      213: -6270560695904041084
+    second: tilee-Sheet_61
+  - first:
+      213: -3303196310641318287
+    second: tilee-Sheet_62
+  - first:
+      213: -5460315561617035531
+    second: tilee-Sheet_63
+  - first:
+      213: 2048464578749132394
+    second: tilee-Sheet_64
+  - first:
+      213: -7339629425907337176
+    second: tilee-Sheet_65
+  - first:
+      213: 867758020757247146
+    second: tilee-Sheet_66
+  - first:
+      213: 6097463453725097415
+    second: tilee-Sheet_67
+  - first:
+      213: 2573685706529655239
+    second: tilee-Sheet_68
+  - first:
+      213: 1769255630057667674
+    second: tilee-Sheet_69
+  - first:
+      213: -7017680991486179276
+    second: tilee-Sheet_70
+  - first:
+      213: -888393829491902826
+    second: tilee-Sheet_71
+  - first:
+      213: -3229317914808110589
+    second: tilee-Sheet_72
+  - first:
+      213: -1552528582534620769
+    second: tilee-Sheet_73
+  - first:
+      213: 3610301891593696832
+    second: tilee-Sheet_74
+  - first:
+      213: 335274067284304888
+    second: tilee-Sheet_75
+  - first:
+      213: -664638319306495607
+    second: tilee-Sheet_76
+  - first:
+      213: 8761371831261986666
+    second: tilee-Sheet_77
+  - first:
+      213: -3205513442793750836
+    second: tilee-Sheet_78
+  - first:
+      213: -8985241444234787682
+    second: tilee-Sheet_79
+  - first:
+      213: -1252104161751326169
+    second: tilee-Sheet_80
+  - first:
+      213: -3956792150699924529
+    second: tilee-Sheet_81
+  - first:
+      213: 5458715881882930539
+    second: tilee-Sheet_82
+  - first:
+      213: -6498746712093779208
+    second: tilee-Sheet_83
+  - first:
+      213: -2285364367482122418
+    second: tilee-Sheet_84
+  - first:
+      213: 2471691400985589370
+    second: tilee-Sheet_85
+  - first:
+      213: 3926516691070659050
+    second: tilee-Sheet_86
+  - first:
+      213: -7737822285471083781
+    second: tilee-Sheet_87
+  - first:
+      213: 6823146280209956550
+    second: tilee-Sheet_88
+  - first:
+      213: -3369052270890758542
+    second: tilee-Sheet_89
+  - first:
+      213: 7778772938603478457
+    second: tilee-Sheet_90
+  - first:
+      213: -8035132865613515703
+    second: tilee-Sheet_91
+  - first:
+      213: 7132337866449972876
+    second: tilee-Sheet_92
+  - first:
+      213: 2911790618810430088
+    second: tilee-Sheet_93
+  - first:
+      213: -7395817555047716296
+    second: tilee-Sheet_94
+  - first:
+      213: -3603233042448161813
+    second: tilee-Sheet_95
+  - first:
+      213: 3895276178874230383
+    second: tilee-Sheet_96
+  - first:
+      213: 479060485336626631
+    second: tilee-Sheet_97
+  - first:
+      213: -708922336185692155
+    second: tilee-Sheet_98
+  - first:
+      213: 2869576181414676149
+    second: tilee-Sheet_99
+  - first:
+      213: 6788396736171701521
+    second: tilee-Sheet_100
+  - first:
+      213: -8459394103855840981
+    second: tilee-Sheet_101
+  - first:
+      213: -3226042599256289690
+    second: tilee-Sheet_102
+  - first:
+      213: 1179578502298881889
+    second: tilee-Sheet_103
+  - first:
+      213: 6122633375353851915
+    second: tilee-Sheet_104
+  - first:
+      213: 8246021802123184780
+    second: tilee-Sheet_105
+  - first:
+      213: 2965218883778590185
+    second: Dirt9x9_TL
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 16
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Dirt9x9_TL
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 112
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 520f75d6c13b0cd40800000000000000
+      internalID: 5602674871123832869
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dirt9x9_T
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 112
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb7784c7d38713f60800000000000000
+      internalID: 8012317417542285244
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dirt9x9_TR
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 112
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9f11434fb9e4051d0800000000000000
+      internalID: -3364102489921809927
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DirtColumn_T
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 112
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d72afa52b8fcce660800000000000000
+      internalID: 7416530882912035453
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Prop_Carrot
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 112
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 17813d1c91db77c40800000000000000
+      internalID: 5510080587434760305
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Prop_RabbitCurrency
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 112
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a743d6c0e734a2a0800000000000000
+      internalID: -6727190504836741212
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Prop_Bag
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 112
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4daa6c86ee4ca1000800000000000000
+      internalID: 7534877633587924
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dirt9x9_L
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 96
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca07a418be35c2bb0800000000000000
+      internalID: -4959496818690199380
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dirt9x9_Center
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 96
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f461d8db756173800800000000000000
+      internalID: 591966442120615503
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dirt9x9_R
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 96
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 94178c16aca59f9e0800000000000000
+      internalID: -1587137568400969399
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DirtColumn_Middle
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 96
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 20d5e4782b5381f30800000000000000
+      internalID: 4546442864721026306
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dirt9x9_BL
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 80
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c276d66f3a96b0e30800000000000000
+      internalID: 4470783208030299948
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dirt9x9_B
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 80
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8d3a84760a3bcfc50800000000000000
+      internalID: 6700427847129408472
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Dirt9x9_BR
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 80
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 535d823c2e442ad30800000000000000
+      internalID: 4441187923268261173
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DirtColumn_B
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 80
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4856f0a59f93cc5d0800000000000000
+      internalID: -3040991905261329020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DirtFlat_L
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 64
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 675e7984df7313680800000000000000
+      internalID: -8777172637784218250
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DirtFlat_M
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 64
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 70412634750f47680800000000000000
+      internalID: -8758111117745449977
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DirtFlat_R
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 64
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 005348133dd31a090800000000000000
+      internalID: -8025065083719371520
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DirtSingle
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 64
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f032852809f15140800000000000000
+      internalID: 4706816898963222774
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PanelBlock_TL
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 48
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bf2de9707c34f6d90800000000000000
+      internalID: -7102383565234580741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PanelBlock_T
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 48
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4722216a144d16590800000000000000
+      internalID: -7682626110893186444
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PanelBlock_TR
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 48
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f504328b35ac66930800000000000000
+      internalID: 4136215768706793567
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PanelColumn_T
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 48
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f1d658da06678a6b0800000000000000
+      internalID: -5284844005119136481
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PanelBlock_L
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 32
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 487a3497c1e02d840800000000000000
+      internalID: 5247272031296399236
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PanelBlock_M
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 32
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a0ce01e061fa4d140800000000000000
+      internalID: 4743608816788106250
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PanelBlock_R
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 32
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 455faa5af32eed590800000000000000
+      internalID: -7647426354238261932
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PanelColumn_M
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 32
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 740a45d22c781b510800000000000000
+      internalID: 1563179813728198727
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HP_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4171022db2ea89890800000000000000
+      internalID: -7451014080252340460
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HP_2
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 52592e887ebb443d0800000000000000
+      internalID: -3223244830182042331
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HP_3
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 33c8ee2f0121001d0800000000000000
+      internalID: -3386687055778116557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PanelBlock_BL
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 52f9f845da3902990800000000000000
+      internalID: -7412762613994512603
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PanelBlock_B
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ae3883a691107f850800000000000000
+      internalID: 6410593803253089258
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PanelBlock_BR
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8a4747b86dd5b2b60800000000000000
+      internalID: 7722369162100896936
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PanelColumn_B
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 62c0f11d2b0c0a980800000000000000
+      internalID: -8529605819994534874
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PanelFlat_L
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bbd48f81d4ce94340800000000000000
+      internalID: 4848666289716612539
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PanelFlat_M
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04475361b1096da80800000000000000
+      internalID: -8442402005448297408
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PanelFlat_R
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bc7243e26106e8dd0800000000000000
+      internalID: -2481940696253847605
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PanelSingle
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fd8b6f96373dcd9c0800000000000000
+      internalID: -3901010684557215521
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
