@@ -3,22 +3,14 @@ using System.Collections.Generic;
 
 public class MotorState_MoveOnGround : MotorStateBase
 {
-    Module_StickToSlope stickToSlope;
     public MotorState_MoveOnGround(Player2DMotor motor, Player2DFeedbacks feedback) : base(motor, feedback)
     {
         modules = new List<ModuleBase>()
         {
             new Module_Gravity(motor, feedback),
-            new Module_CeilingHitCheck(motor, feedback),
             new Module_MoveOnGround(motor, feedback),
             new Module_StandardJump(motor, feedback),
         };
-
-        if (settings.StickyGround)
-        {
-            stickToSlope = new Module_StickToSlope(motor, this.feedback);
-            modules.Add(stickToSlope);
-        }
     }
 
     public override void StateEntry()
@@ -26,8 +18,6 @@ public class MotorState_MoveOnGround : MotorStateBase
         base.StateEntry();
 
         //Immediately stick to slope, don't wait until next frame.
-        if (settings.StickyGround)
-            stickToSlope.TickFixedUpdate();
         feedback.Animator.PlayOnGround();
     }
 

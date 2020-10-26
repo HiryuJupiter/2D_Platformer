@@ -10,7 +10,6 @@ public class MotorState_WallClimb : MotorStateBase
         modules = new List<ModuleBase>()
         {
             new Module_Gravity(motor, feedback),
-            new Module_CeilingHitCheck(motor, feedback),
             wallClimb
         };
     }

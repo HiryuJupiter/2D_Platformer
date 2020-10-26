@@ -9,7 +9,6 @@ public class MotorState_Aerial : MotorStateBase
         modules = new List<ModuleBase>()
         {
             new Module_Gravity(motor, feedbacks),
-            new Module_CeilingHitCheck(motor, feedbacks),
             new Module_MoveInAir(motor, feedbacks),
             new Module_StandardJump(motor, feedbacks),
         };

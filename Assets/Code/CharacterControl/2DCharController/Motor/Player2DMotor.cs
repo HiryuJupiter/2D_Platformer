@@ -3,6 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
+/*
+This script has a FSM that uses a polymorphic type. The different states (i.e. running, jumping, wall climbing) are inside classes
+that all derive from a common base class, MotorStateBase. In doing this, we can change the currentStateClass on the fly by 
+reassigning them to a variable of the base type.
+ */
+
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(MotorRaycaster))]
 public class Player2DMotor : MonoBehaviour
@@ -100,6 +106,7 @@ public class Player2DMotor : MonoBehaviour
 
     void OnGUI()
     {
+        return;
         GUI.Label(new Rect(20, 20, 500, 20), "Current State: " + currentStateType); 
 
         GUI.Label(new Rect(20, 60, 290, 20), "=== GROUND MOVE === ");
