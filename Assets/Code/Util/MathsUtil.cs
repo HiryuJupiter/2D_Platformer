@@ -4,6 +4,7 @@ using UnityEngine.Assertions.Must;
 
 public static class MathsUtil
 {
+    //Similar to Mathf.Sign but allows zero
     public static int SignAllowingZero (float value)
     {
         if (value > 0.1f)

@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+//Handles global rotation for things like coins
 public class GlobalRotation : MonoBehaviour
 {
-    public static Quaternion CoinRotation;
+    public static Quaternion rotation;
 
     public float CoinRotationModifier = 0.5f;
 
     void Update()
     {
-        CoinRotation = Quaternion.Euler(0f, 0f, Time.time * CoinRotationModifier) ;
+        rotation = Quaternion.Euler(0f, 0f, Time.time * CoinRotationModifier) ;
     }
 
     //private void OnGUI()

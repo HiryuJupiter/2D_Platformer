@@ -8,12 +8,14 @@ public class Highscore : MonoBehaviour
 
     int highscore;
 
+    //Set the high score
     public void DisplayHighscore (int score)
     {
         highscore = score;
         StartCoroutine(PlayTextAnimation());
     }
 
+    //Play the score increase animation
     IEnumerator PlayTextAnimation ()
     {
         float score = 0;

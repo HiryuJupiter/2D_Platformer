@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+//Test script for checking if player interaction works
 public class TestObject : Interactables, IDamagable
 {
 

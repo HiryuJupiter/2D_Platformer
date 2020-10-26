@@ -2,8 +2,10 @@
 using UnityEngine.SceneManagement;
 using System.Collections;
 
-public class GameplaySceneManager : Singleton<GameplaySceneManager>
+public class GameplaySceneManager : MonoBehaviour
 {
+    public static GameplaySceneManager instance;
+
     public GameStates GameState { get; protected set; }
 
     public int coinsInScene { get; private set; }
@@ -15,12 +17,7 @@ public class GameplaySceneManager : Singleton<GameplaySceneManager>
     #region MonoBehavior
     void Awake()
     {
-        DeleteDuplicateSingleton();
-        if (instance == null)
-        {
-            instance = this;
-        }
-
+        instance = this;
         coinsInScene = GameObject.FindObjectsOfType<Coin>().Length;
     }
 
@@ -36,6 +33,7 @@ public class GameplaySceneManager : Singleton<GameplaySceneManager>
     #endregion
     
     #region Public
+    //Public method that receives the event for when the player picks up a coin
     public void PickUpCoin ()
     {
         hud.SetCoinsScore(++coinsPickedUp);
@@ -51,13 +49,14 @@ public class GameplaySceneManager : Singleton<GameplaySceneManager>
     }
 
     
-
     public void ReturnToMainMenu ()
     {
+        //Load main menu 
         SceneManager.LoadScene(MainMenuIndex);
     }
     #endregion
 
+    //Game over, tell HUD to reveal game score screen
     void GameOver ()
     {
         hud.ShowGameWonScreen();

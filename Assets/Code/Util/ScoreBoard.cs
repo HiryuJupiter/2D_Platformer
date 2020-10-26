@@ -41,11 +41,13 @@ public class ScoreBoard : MonoBehaviour
     #region Public - Button presses
     public void ToReplayGame ()
     {
+        //Calls game start event
         SceneEvents.GameStart.CallEvent();
     }
 
     public void ToMainMenu ()
     {
+        //Calls the back to main menu event
         SceneEvents.GameOverBackToMain.CallEvent();
     }
     #endregion
@@ -54,6 +56,7 @@ public class ScoreBoard : MonoBehaviour
     #region Canvas visibility
     void RevealCanvas()
     {
+        //Fade in a canvas and then allow press any key to quit
         StartCoroutine(CanvasGroupHelper.CanvasFadeIn(cvs, 0.1f));
         StartCoroutine(AllowForAnykeyToQuit());
     }
@@ -68,6 +71,7 @@ public class ScoreBoard : MonoBehaviour
     #region WaitForKey
     IEnumerator AllowForAnykeyToQuit ()
     {
+        //Set a bool that says the player can press a key to quit
         yield return new WaitForSeconds(2f);
         anyKeyToQuit.SetActive(true);
         yield return new WaitForSeconds(0.2f);
